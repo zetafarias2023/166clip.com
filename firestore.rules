@@ -1,0 +1,254 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    // Dueño: tu Gmail (se configura con `npm run set-owner -- tu@gmail.com`). Nadie más puede serlo.
+    function isOwner() {
+      return signedIn() && request.auth.token.email_verified == true
+        && request.auth.token.email == 'fariaszeta794@gmail.com';
+    }
+    function isAdmin() {
+      return isOwner() || (signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+    function onlyMine(field) {
+      return request.resource.data.get(field, {}).diff(resource.data.get(field, {})).affectedKeys().hasOnly([request.auth.uid]);
+    }
+    function okStr(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+    function okHttps(d, k, max) {
+      return !(k in d) || d[k] == '' || (d[k] is string && d[k].size() <= max && d[k].matches('https://.*'));
+    }
+    function okStorageUrl(d, k) {
+      return !(k in d) || d[k] == '' || (d[k] is string && d[k].size() <= 800
+        && d[k].matches('https://firebasestorage.googleapis.com/.*'));
+    }
+
+    // Perfil: solo campos conocidos, con tipos y tamaños validados.
+    function validProfile(d) {
+      return d.keys().hasOnly(['name','cat','soft','price','bio','yt','tt','ig','wa','dc','p1','p2','p3',
+                               'col','av','works','avatarUrl','avatarId','bannerUrl','createdAt','hidden'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 40
+        && d.cat is string && d.cat.size() <= 40
+        && okStr(d, 'soft', 120) && okStr(d, 'price', 60) && okStr(d, 'bio', 600)
+        && okStr(d, 'yt', 60) && okStr(d, 'tt', 60) && okStr(d, 'ig', 60)
+        && okStr(d, 'wa', 20) && okStr(d, 'dc', 40) && okStr(d, 'avatarId', 30)
+        && okHttps(d, 'p1', 200) && okHttps(d, 'p2', 200) && okHttps(d, 'p3', 200)
+        && okStorageUrl(d, 'avatarUrl') && okStorageUrl(d, 'bannerUrl')
+        && (!('col' in d) || (d.col is int && d.col >= 0 && d.col < 12))
+        && (!('av' in d) || d.av is bool)
+        && (!('hidden' in d) || d.hidden is bool)
+        && (!('works' in d) || (d.works is list && d.works.size() <= 12))
+        && (!('createdAt' in d) || d.createdAt is timestamp);
+    }
+
+    // Admins extra: solo el dueño los crea. Cada uno lee su propio documento.
+    match /admins/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isOwner());
+      allow write: if isOwner();
+    }
+
+    // Perfiles: públicos. Solo el dueño crea/edita. El dueño o un admin pueden borrar.
+    match /profiles/{uid} {
+      allow read: if true;
+      allow create, update: if signedIn() && request.auth.uid == uid && validProfile(request.resource.data);
+      allow delete: if signedIn() && (request.auth.uid == uid || isAdmin());
+    }
+
+    // Insignia de verificado y editores destacados: los ve cualquiera, solo un admin escribe.
+    match /verified/{uid} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /featured/{uid} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Solicitudes de verificación: una por usuario.
+    match /verifyRequests/{uid} {
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'at'])
+        && request.resource.data.name is string && request.resource.data.name.size() <= 40;
+      allow read, delete: if isAdmin();
+    }
+
+    // Seguidores: el id del documento es "seguidor_seguido".
+    match /follows/{fid} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['follower', 'followed', 'at'])
+        && request.resource.data.follower == request.auth.uid
+        && request.resource.data.followed is string
+        && request.resource.data.followed != request.auth.uid
+        && fid == request.auth.uid + '_' + request.resource.data.followed
+        && exists(/databases/$(database)/documents/profiles/$(request.resource.data.followed));
+      allow delete: if signedIn()
+        && (resource.data.follower == request.auth.uid || resource.data.followed == request.auth.uid);
+    }
+
+    // Listas personales (favoritos, archivados, mejores amigos, silenciados, bloqueados): solo su dueño.
+    function okList(d, k) { return !(k in d) || (d[k] is list && d[k].size() <= 500); }
+    match /userLists/{uid} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['fav','archived','close','muted','blocked'])
+        && okList(request.resource.data, 'fav') && okList(request.resource.data, 'archived')
+        && okList(request.resource.data, 'close') && okList(request.resource.data, 'muted')
+        && okList(request.resource.data, 'blocked');
+    }
+
+    // Bloqueo real: si la otra persona te bloqueó, no podés escribirle (se comprueba en el servidor).
+    function otherOf(parts) { return parts[0] == request.auth.uid ? parts[1] : parts[0]; }
+    function blockedBy(other) {
+      return exists(/databases/$(database)/documents/userLists/$(other))
+        && request.auth.uid in get(/databases/$(database)/documents/userLists/$(other)).data.get('blocked', []);
+    }
+
+    // Presencia ("en línea"): cualquiera con sesión la lee, solo vos escribís la tuya.
+    match /presence/{uid} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['at']) && request.resource.data.at == request.time;
+    }
+
+    // Token de avisos push de tu dispositivo.
+    match /fcmTokens/{uid} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['token', 'at'])
+        && request.resource.data.token is string && request.resource.data.token.size() <= 400;
+    }
+
+    // Conversaciones: solo las dos personas participantes.
+    match /conversations/{cid} {
+      allow read: if signedIn() && request.auth.uid in resource.data.participants;
+
+      // El id es "uidA_uidB" con los uid ordenados, y la otra persona debe tener perfil.
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['participants', 'names', 'lastText', 'lastFrom', 'lastAt'])
+        && request.resource.data.participants is list
+        && request.resource.data.participants.size() == 2
+        && request.resource.data.participants[0] != request.resource.data.participants[1]
+        && request.auth.uid in request.resource.data.participants
+        && cid == request.resource.data.participants[0] + '_' + request.resource.data.participants[1]
+        && exists(/databases/$(database)/documents/profiles/$(
+             request.resource.data.participants[0] == request.auth.uid
+               ? request.resource.data.participants[1]
+               : request.resource.data.participants[0]))
+        && request.resource.data.lastFrom == request.auth.uid
+        && !blockedBy(otherOf(request.resource.data.participants))
+        && request.resource.data.lastText is string && request.resource.data.lastText.size() <= 80;
+
+      // Solo se puede marcar "visto" o actualizar el último mensaje propio. Los participantes no cambian.
+      allow update: if signedIn()
+        && request.auth.uid in resource.data.participants
+        && request.resource.data.participants == resource.data.participants
+        && (
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seen', 'cleared', 'typing'])
+            && onlyMine('seen') && onlyMine('cleared') && onlyMine('typing'))
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['names', 'lastText', 'lastFrom', 'lastAt'])
+            && request.resource.data.lastFrom == request.auth.uid
+            && !blockedBy(otherOf(resource.data.participants))
+            && request.resource.data.lastText is string && request.resource.data.lastText.size() <= 80
+          )
+        );
+
+      match /messages/{mid} {
+        allow read: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(cid)).data.participants;
+        allow delete: if signedIn() && resource.data.from == request.auth.uid;
+        // Reacciones: cualquiera de los dos puede cambiar SOLO su propia reacción (un emoji corto).
+        allow update: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(cid)).data.participants
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['react'])
+          && request.resource.data.get('react', {}).diff(resource.data.get('react', {})).affectedKeys().hasOnly([request.auth.uid])
+          && request.resource.data.get('react', {}).size() <= 2
+          && (!(request.auth.uid in request.resource.data.get('react', {}))
+              || (request.resource.data.react[request.auth.uid] is string && request.resource.data.react[request.auth.uid].size() <= 8));
+        allow create: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(cid)).data.participants
+          && request.resource.data.keys().hasOnly(['from', 'text', 'img', 'aud', 'dur', 'reply', 'at'])
+          && !blockedBy(otherOf(get(/databases/$(database)/documents/conversations/$(cid)).data.participants))
+          && (!('reply' in request.resource.data)
+              || (request.resource.data.reply is map
+                  && request.resource.data.reply.keys().hasOnly(['id', 'text', 'from'])
+                  && request.resource.data.reply.id is string && request.resource.data.reply.id.size() <= 40
+                  && request.resource.data.reply.text is string && request.resource.data.reply.text.size() <= 80
+                  && request.resource.data.reply.from is string && request.resource.data.reply.from.size() <= 40))
+          && request.resource.data.from == request.auth.uid
+          && request.resource.data.at == request.time
+          && (
+            ('text' in request.resource.data && !('img' in request.resource.data) && !('aud' in request.resource.data)
+              && request.resource.data.text is string
+              && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 1000)
+            ||
+            ('img' in request.resource.data && !('text' in request.resource.data) && !('aud' in request.resource.data)
+              && request.resource.data.img is string && request.resource.data.img.size() <= 800
+              && request.resource.data.img.matches('https://firebasestorage.googleapis.com/.*'))
+            ||
+            ('aud' in request.resource.data && !('text' in request.resource.data) && !('img' in request.resource.data)
+              && request.resource.data.aud is string && request.resource.data.aud.size() <= 800
+              && request.resource.data.aud.matches('https://firebasestorage.googleapis.com/.*')
+              && request.resource.data.dur is int && request.resource.data.dur >= 0 && request.resource.data.dur <= 600)
+          );
+      }
+    }
+
+    // Chatcrack Pro (todos los avatares). El usuario avisa su pago; solo un admin lo aprueba.
+    match /proUsers/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+    match /proRequests/{uid} {
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'txn', 'at'])
+        && request.resource.data.name is string && request.resource.data.name.size() <= 40
+        && request.resource.data.txn is string && request.resource.data.txn.size() >= 8 && request.resource.data.txn.size() <= 40
+        && request.resource.data.at == request.time;
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+
+    // Llamadas de voz (señalización WebRTC). Solo las dos personas de la llamada.
+    match /calls/{cid} {
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['from', 'to', 'fromName', 'status', 'offer', 'at'])
+        && request.resource.data.from == request.auth.uid
+        && request.resource.data.to is string && request.resource.data.to != request.auth.uid
+        && request.resource.data.fromName is string && request.resource.data.fromName.size() <= 40
+        && request.resource.data.status == 'ringing'
+        && request.resource.data.offer is map
+        && request.resource.data.at == request.time
+        && !blockedBy(request.resource.data.to);
+      allow read, delete: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+      allow update: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'answer']);
+
+      match /ice/{iid} {
+        allow read: if signedIn()
+          && (get(/databases/$(database)/documents/calls/$(cid)).data.from == request.auth.uid
+              || get(/databases/$(database)/documents/calls/$(cid)).data.to == request.auth.uid);
+        allow create: if signedIn() && request.resource.data.from == request.auth.uid
+          && request.resource.data.keys().hasOnly(['from', 'c'])
+          && request.resource.data.c is string && request.resource.data.c.size() <= 2000
+          && (get(/databases/$(database)/documents/calls/$(cid)).data.from == request.auth.uid
+              || get(/databases/$(database)/documents/calls/$(cid)).data.to == request.auth.uid);
+      }
+    }
+
+    // Reportes: uno por persona y perfil (id "quien_perfil"). Solo admins leen o descartan.
+    match /reports/{rid} {
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['profileId', 'by', 'reason', 'at'])
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.profileId is string && request.resource.data.profileId.size() <= 128
+        && rid == request.auth.uid + '_' + request.resource.data.profileId
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() > 0 && request.resource.data.reason.size() <= 300
+        && request.resource.data.at == request.time;
+      allow read, delete: if isAdmin();
+    }
+  }
+}

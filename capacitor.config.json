@@ -1,0 +1,6 @@
+{
+  "appId": "com.chatcrack.app",
+  "appName": "Chatcrack",
+  "webDir": "dist",
+  "server": { "androidScheme": "https" }
+}
