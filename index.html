@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
+<title>166clip – Clips verticales con subtítulos</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="w">
+<header><div class="logo">166<b>clip</b></div>
+<nav id="nv" class="hid"><button class="tab on" data-t="a">🎬 Estudio</button><button class="tab" data-t="e">✂ Editor</button><button class="tab" data-t="v">🔄 Convertir</button><button class="tab" data-t="c">📁 Mis clips</button><button class="tab" data-t="g">📚 Guías</button><button class="tab" data-t="b">🔗 Marcar momento</button></nav>
+<div class="uc"><span id="uc" class="uc"></span><button id="th" title="Tema">◐</button></div></header>
+
+<section id="login"><div class="hero"><h1>Tus streams, convertidos en <span>clips virales</span></h1>
+<p class="sub">Cortá clips verticales con subtítulos, editá videos completos para YouTube y convertí a MP4. Todo desde el navegador, en resoluciones desde 800×600 hasta 2K.</p>
+<div style="margin-top:22px"><button class="p big" id="gl">🔐 Entrar con Google</button><button class="big" id="gu">Probar sin cuenta</button></div>
+<div class="pills"><span>⚡ Todo en tu navegador</span><span>🔒 Sin subir nada</span><span>🎞 Hasta 2K</span><span>🎙 Subtítulos con voz</span></div><p class="note" id="fs">Conectando con Firebase…</p></div>
+<div class="feat"><div class="card"><b>📱 Vertical</b><br><span class="note">Una cámara recortada en 9:16.</span></div><div class="card"><b>◫ Dividido</b><br><span class="note">Dos recortes: tu cara arriba y el juego abajo.</span></div><div class="card"><b>▤ División 3x7</b><br><span class="note">Franja chica arriba y recuadro grande abajo.</span></div><div class="card"><b>🖼 Foto + Clip</b><br><span class="note">Tu foto arriba y el clip abajo.</span></div></div></section>
+
+<main id="app" class="hid">
+<section id="s-a">
+<div class="drop" id="drop"><big>📤</big><b>Subí tu video</b><br>Tocá o arrastrá un archivo (cualquier formato: MP4, MOV, MKV, AVI, HEVC…)<input id="f" type="file" accept="video/*" class="hid"></div>
+<p class="note" id="lerr" style="text-align:center;color:#f87171"></p><video id="v" playsinline style="position:absolute;opacity:0;pointer-events:none;width:2px;height:2px"></video>
+<div class="g hid" id="ed">
+<div class="pv"><canvas id="cv" width="1080" height="1920"></canvas>
+<div class="btns"><button id="pl" class="p" style="width:46px">▶</button><span id="ptm" class="note" style="min-width:104px;text-align:center">0:00.0 / 0:00.0</span><input id="ph" type="range" step="0.05" min="0" max="1" value="0" style="flex:1"></div></div>
+<div>
+<div class="card"><h3><i>1</i>Elegí el tramo</h3>
+<label>Clip de <b id="td"></b> · <b id="ts"></b> → <b id="te"></b> <span class="note">(arrastrá las bolitas verdes)</span></label>
+<div class="dual"><div class="tk"><i id="tf"></i></div><input type="range" id="rs" step="0.1" min="0" max="100" value="0"><input type="range" id="rg" step="0.1" min="0" max="100" value="100"></div>
+<div class="row"><div><label>Empieza en (mm:ss)</label><div class="nd"><button data-n="s-1">−1s</button><input type="text" id="si"><button data-n="s+1">+1s</button></div></div><div><label>Termina en (mm:ss)</label><div class="nd"><button data-n="e-1">−1s</button><input type="text" id="ei"><button data-n="e+1">+1s</button></div></div></div>
+<div class="btns"><button id="bs">⏮ Inicio = ahora</button><button id="be">⏭ Fin = ahora</button></div>
+<div class="btns"><span class="note">Duración rápida:</span><button data-d="15">15s</button><button data-d="30">30s</button><button data-d="45">45s</button><button data-d="60">60s</button></div></div>
+<div class="card"><h3><i>2</i>Formato y encuadre</h3>
+<div class="lay" id="ly"><button class="on" data-l="single"><span>📱</span>Vertical</button><button data-l="split"><span>◫</span>Dividido</button><button data-l="37"><span>▤</span>3x7</button><button data-l="photo"><span>🖼</span>Foto + Clip</button><button data-l="pip"><span>🧑‍💻</span>Cam + Juego</button><button data-l="wide"><span>🎞</span>Cine blur</button></div>
+<div id="phw" class="hid"><label>Foto de arriba</label><input type="file" id="pf" accept="image/*"></div>
+<label>Panel a encuadrar</label><select id="pn"><option value="0">Panel 1 (arriba / principal)</option><option value="1">Panel 2 (abajo / cámara)</option></select>
+<div class="r3"><div><label>Zoom</label><input type="range" id="zm" min="1" max="3" step="0.01" value="1"></div><div><label>Izq ↔ Der</label><input type="range" id="px" min="0" max="1" step="0.01" value="0.5"></div><div><label>Arriba ↔ Abajo</label><input type="range" id="py" min="0" max="1" step="0.01" value="0.5"></div></div>
+<div class="row"><div><label>Proporción</label><select id="fm"><option value="v">Vertical 9:16</option><option value="s">Cuadrado 1:1</option><option value="h">Horizontal 16:9</option></select></div><div><label>Logo del canal (opcional)</label><input type="file" id="lf" accept="image/*"></div></div></div>
+<div class="card"><h3><i>3</i>Plantilla y textos</h3><div class="tpl" id="tp"></div>
+<label>Título</label><input type="text" id="ti" placeholder="¡No se lo esperaba nadie! 😱">
+<div class="btns" id="tc"></div>
+<div class="row"><div><label>Estilo de texto</label><select id="tst"><option value="imp">Impacto</option><option value="neo">Neón brillante</option><option value="box">Caja amarilla</option><option value="grd">Degradado</option><option value="bnr">Banner</option><option value="pil">Píldora</option><option value="cmc">Cómic</option><option value="min">Minimal</option></select></div><div><label>Posición</label><select id="tpo"><option value="top">Arriba</option><option value="mid">Centro</option><option value="low">Abajo</option></select></div></div>
+<div class="row"><div><label>Tamaño del título</label><input type="range" id="tsz" min="60" max="150" value="100"></div><div><label>@ del canal</label><input type="text" id="hd" placeholder="@tucanal"></div></div></div>
+<div class="card"><h3><i>4</i>Subtítulos</h3>
+<div class="row"><div><label>Estilo</label><select id="ss"><option value="k">Karaoke (palabra resaltada)</option><option value="p">Pop amarillo</option><option value="c">Clásico con fondo</option><option value="m">Minimal</option></select></div>
+<div><label>Posición</label><select id="sp"><option value="b">Abajo</option><option value="m">Centro</option><option value="t">Arriba</option></select></div></div>
+<label>Tamaño</label><input type="range" id="fz" min="30" max="90" value="56">
+<div class="card" style="background:var(--in);margin:10px 0"><b>🎙 Subtítulos automáticos con voz</b><p class="note" id="aun"></p><div class="row"><div><label>Idioma que se habla</label><select id="al"><option value="es">Español</option><option value="en">Inglés</option><option value="">Automático (idioma del navegador)</option></select></div><div class="btns" style="align-items:end"><button class="p" id="au">🎙 Generar desde el audio</button><button id="ax" class="hid">⏹ Detener</button></div></div><p class="note" id="aus"></p><div class="btns"><span class="note">Ajustar sincronía:</span><button id="sy1">⏪ −0,5 s</button><button id="sy2">⏩ +0,5 s</button></div></div>
+<label>O pegá lo que se dice y lo repartimos en el tiempo del clip</label><textarea id="tx" rows="3" placeholder="Escribí o pegá el texto del clip…"></textarea>
+<div class="row"><div><label>Palabras por subtítulo</label><input type="number" id="wn" value="4" min="1" max="10"></div><div class="btns" style="align-items:end"><button class="p" id="gen">✨ Generar</button></div></div>
+<div class="btns"><button id="add">＋ Línea ahora</button><label style="margin:0;cursor:pointer" class="chip">📄 Importar .srt/.vtt<input type="file" id="sf" accept=".srt,.vtt" class="hid"></label><button id="clr">Borrar</button></div><div id="sl"></div></div>
+<div class="card"><h3><i>5</i>Audio, música y voz</h3>
+<label>Volumen del audio original del video: <b id="ovl">100</b>%</label><input type="range" id="ov" min="0" max="150" value="100">
+<div class="row"><div><label>🎵 Música o audio extra</label><input type="file" id="mf" accept="audio/*"></div><div><label>Volumen música: <b id="mvl">40</b>%</label><input type="range" id="mv" min="0" max="150" value="40"></div></div>
+<div class="row"><div><label>La música arranca en el segundo</label><input type="number" id="mo" value="0" min="0" step="0.5"></div><div><label class="chk"><input type="checkbox" id="mfd" checked> Bajar volumen al final (fade)</label><label class="chk"><input type="checkbox" id="dk" checked> Bajar la música cuando habla la voz en off</label></div></div>
+<div class="row"><div><label>🎙 Voz en off (archivo de audio)</label><input type="file" id="vf" accept="audio/*"></div><div><label>Volumen voz: <b id="vvl">100</b>%</label><input type="range" id="vv" min="0" max="150" value="100"></div></div>
+<label>La voz en off arranca a los (segundos del clip)</label><input type="number" id="vd" value="0" min="0" step="0.5">
+<p class="note" id="au2"></p></div>
+<div class="card"><h3><i>6</i>Texto a voz</h3>
+<p class="note">Escribí un texto y una voz del dispositivo lo lee en voz alta. También podés pasarlo a subtítulos y que la voz los lea sola mientras reproducís el clip.</p>
+<textarea id="ttx" rows="3" placeholder="Escribí lo que querés que diga la voz…"></textarea>
+<div class="btns"><button class="p" id="tl">🔊 Escuchar</button><button id="ts2">⏹ Parar</button><button id="tg">📝 Pasar a subtítulos</button></div>
+<div class="row"><div><label>Voz</label><select id="tv"></select></div><div><label>Velocidad</label><select id="tr"><option value="a">Automática (se ajusta al subtítulo)</option><option value=".85">Lenta</option><option value="1">Normal</option><option value="1.2">Rápida</option></select></div></div>
+<label>Tono de voz</label><input type="range" id="tp2" min="0.5" max="1.5" step="0.05" value="1">
+<div class="btns"><button id="tb">🔊 Probar voz</button></div>
+<label class="chk"><input type="checkbox" id="tt"> Leer mis subtítulos en voz alta al reproducir</label>
+<label class="chk"><input type="checkbox" id="tx2"> Incluir la voz en el clip exportado</label>
+<p class="note">Los navegadores no dejan grabar esta voz directamente: para incluirla en el clip, al exportar elegí “Esta pestaña” y activá “Compartir audio de la pestaña”. Si no, la voz suena en vivo al reproducir, o podés subir un audio propio en “Voz en off”.</p></div>
+<div class="card"><h3><i>7</i>Generá tu clip</h3><label>Nombre</label><input type="text" id="nm" value="mi-clip">
+<div class="btns"><button class="p big" id="go" style="margin:0">🎬 Crear clip</button></div>
+<div class="bar hid" id="pb"><i id="pi"></i></div><p class="note" id="st">Se graba en tiempo real: dejá la pestaña abierta hasta terminar.</p>
+<div id="rc" class="hid"><video id="rv" controls playsinline style="width:100%;max-height:50vh;border-radius:12px;background:#000"></video>
+<div class="btns"><button class="p" id="dl">⬇ Descargar clip</button></div><p class="note" id="dn"></p></div></div>
+</div></div>
+<p class="note">Los subtítulos automáticos usan tu micrófono mientras suena el tramo (funciona en Chrome de escritorio). Si no te sirve, importá un .srt o pegá el texto.</p>
+</section>
+
+<section id="s-c" class="hid"><div class="card"><h3>Mis clips (de esta sesión)</h3><p class="note" id="ce">Todavía no creaste clips. Se borran al cerrar la página, así que descargalos.</p><div class="mc" id="mc"></div></div></section>
+
+<section id="s-g" class="hid"><div class="card"><h3>Guías rápidas</h3>
+<details><summary>Encuadre vertical</summary><p class="note">Poné lo importante (cara, acción, mira) en el centro. Usá zoom hasta que el sujeto llene el panel, sin cortar la cabeza.</p></details>
+<details><summary>Duración ideal</summary><p class="note">Entre 15 y 45 segundos suele retener mejor. Arrancá directo en el momento fuerte y cortá apenas termina.</p></details>
+<details><summary>Subtítulos que se leen</summary><p class="note">Frases de 3 a 5 palabras, letra grande y contraste alto. Revisá que no tapen la cara ni el HUD del juego.</p></details>
+<details><summary>Qué momentos clipear</summary><p class="note">Reacciones, jugadas increíbles, fails graciosos y frases citables. Si se entiende sin contexto, funciona.</p></details>
+<details><summary>Derechos y respeto</summary><p class="note">Usá contenido propio o con permiso del creador, mencioná su canal y evitá música con copyright.</p></details></div></section>
+
+<section id="s-b" class="hid"><div class="card">
+<label>Link del VOD (Kick, Twitch, YouTube…)</label><input type="text" id="u" placeholder="https://kick.com/video/...">
+<div class="row"><div><label>Inicio (mm:ss)</label><input type="text" id="ms" value="0:00"></div><div><label>Fin</label><input type="text" id="me" value="0:30"></div></div>
+<label>Título</label><input type="text" id="mt" placeholder="Ej: Jugada épica">
+<div class="btns"><button class="p" id="mk">Generar y guardar</button></div><div id="ml"></div>
+<p class="note">Twitch y YouTube aceptan el momento exacto en el link. En Kick guardamos el tiempo para que lo busques en el VOD.</p></div></section>
+<section id="s-e" class="hid pro">
+<div class="mb"><button id="xib">📂 Video</button><button id="xiib">🖼 Imagen</button><button id="xiab">🎵 Audio</button><span class="sp"></span><button id="xun" title="Ctrl+Z">↶ Deshacer</button><button id="xre" title="Ctrl+Y">↷ Rehacer</button><span class="sp"></span><button id="xsp" title="S">✂ Dividir</button><button id="xdl" title="Supr">🗑 Quitar</button><button id="xml">◀ Mover</button><button id="xmr">Mover ▶</button><span class="sp"></span><button id="xex" class="p">⬆ Exportar</button></div>
+<div class="ws">
+<div class="pn lpn"><div class="lts"><button class="lt on" data-p="lp1">Medios</button><button class="lt" data-p="lp5">Textos</button><button class="lt" data-p="lp4">Audio</button><button class="lt" data-p="lp2">Clip</button><button class="lt" data-p="lp3" id="xlt3">Exportar</button></div>
+<div class="lp" id="lp1"><p class="note" id="xms"></p>
+<label class="imp"><span>📹</span><b>Videos</b><small>MP4, MOV, MKV, AVI, HEVC…</small><input type="file" id="xvf" accept="video/*" multiple class="hid"></label>
+<label class="imp"><span>🖼</span><b>Memes e imágenes</b><small>PNG, JPG, GIF</small><input type="file" id="xif" accept="image/*" multiple class="hid"></label>
+<label class="imp"><span>🎵</span><b>Música y sonidos</b><small>MP3, WAV, M4A…</small><input type="file" id="xaf" accept="audio/*" multiple class="hid"></label>
+<p class="note">Tocá un clip en la línea de tiempo para editarlo. Usá la cuchilla ✂ o la tecla S para dividir.</p></div>
+<div class="lp hid" id="lp5"><b>Textos rápidos</b><div class="btns" id="xqp"></div><b>Stickers</b><div class="emjs" id="xst2"></div>
+<hr class="s"><b>Texto propio</b><div class="btns"><input type="text" id="xtx" placeholder="Escribí un texto…" style="flex:1"><button id="xtb" class="p">＋ Texto</button></div>
+<hr class="s"><b>En pantalla</b><div id="xol"></div><p class="note" id="xoe">Todavía no hay textos ni memes. Los nuevos aparecen desde la aguja y duran 3 s. Arrastrá los bloques naranjas en la línea de tiempo, o el meme en el monitor Programa.</p></div>
+<div class="lp hid" id="lp4"><p class="note">Mezclador: volumen, silencio, fundidos y recorte de cada audio. Tocá un bloque verde de la línea de tiempo para seleccionarlo.</p><div id="xal"></div><p class="note" id="xae">Importá música o sonidos y aparecen acá. La música nueva empieza donde esté la aguja.</p><div class="btns"><button id="xiab2" onclick="document.getElementById('xaf').click()">🎵 Importar audio</button></div></div>
+<div class="lp hid" id="lp2"><div class="row"><div><label>Inicio del clip (s)</label><input type="number" id="xci" step="0.1" min="0"></div><div><label>Fin del clip (s)</label><input type="number" id="xco" step="0.1" min="0"></div></div>
+<div class="row"><div><label>Velocidad</label><select id="xcs"><option value=".5">0.5×</option><option value=".75">0.75×</option><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></div><div><label>Volumen: <b id="xcvl">100</b>%</label><input type="range" id="xcv" min="0" max="150" value="100"></div></div><hr class="s"><b>Efectos</b>
+<div class="row"><div><label>Brillo</label><input type="range" data-fx="b" min="0" max="200" value="100"></div><div><label>Contraste</label><input type="range" data-fx="c" min="0" max="200" value="100"></div></div>
+<div class="row"><div><label>Saturación</label><input type="range" data-fx="s" min="0" max="200" value="100"></div><div><label>Blanco y negro</label><input type="range" data-fx="g" min="0" max="100" value="0"></div></div>
+<div class="row"><div><label>Sepia</label><input type="range" data-fx="e" min="0" max="100" value="0"></div><div><label>Desenfoque</label><input type="range" data-fx="l" min="0" max="20" value="0"></div></div>
+<div class="row"><div><label>Zoom (%)</label><input type="range" data-cp="zm" min="100" max="300" value="100"></div><div><label>Fundido entrada / salida (s)</label><div class="nd"><input type="number" data-cp="fi" min="0" max="5" step="0.1" value="0"><input type="number" data-cp="fo" min="0" max="5" step="0.1" value="0"></div></div></div>
+<div class="btns"><button id="xfr">Restablecer efectos</button></div></div>
+<div class="lp hid" id="lp3"><div class="row"><div><label>Resolución</label><select id="xrs"></select></div><div><label>Formato</label><select id="xfm"><option value="mp4">MP4</option><option value="webm">WebM</option></select></div></div><label>Nombre</label><input type="text" id="xnm" value="mi-video">
+<div class="btns"><button class="p big" id="xgo" style="margin:8px 0 0">🎬 Exportar video</button></div><div class="bar hid" id="xpb"><i id="xpi"></i></div><p class="note" id="xst">Se graba en tiempo real: dejá la pestaña abierta. Para YouTube usá 1920×1080 en MP4.</p>
+<div id="xrc" class="hid"><video id="xrv" controls playsinline style="width:100%;border-radius:6px;background:#000"></video><div class="btns"><button class="p" id="xdb">⬇ Descargar</button></div></div></div></div>
+<div class="mons"><div class="pn"><h4>Fuente · clip elegido</h4><video id="xsv" controls playsinline></video><div class="btns"><button id="xmi">⏮ Marcar inicio</button><button id="xmo">⏭ Marcar fin</button></div></div>
+<div class="pn"><h4>Programa · tu video</h4><canvas id="xc" width="1920" height="1080"></canvas><div class="btns tc"><button id="xf1" title="Un cuadro atrás">⏪</button><button id="xp" class="p" style="width:46px">▶</button><button id="xf2" title="Un cuadro adelante">⏩</button><span id="xt" class="note" style="min-width:96px">0:00.0 / 0:00.0</span><input id="xh" type="range" min="0" max="1" step="0.01" value="0" style="flex:1"></div></div></div></div>
+<div class="tp pn"><div class="tt"><button id="xts" class="on" title="Selección">▶</button><button id="xtr2" title="Cuchilla: clic en un clip para dividir">✂</button><button id="xzi" title="Acercar">＋</button><button id="xzo" title="Alejar">－</button></div>
+<div class="th"><div style="height:22px"><input type="range" id="xz" min="10" max="200" value="40" style="width:100%" title="Zoom"></div><div style="height:50px">🎞 V1 Video</div><div style="height:32px">T Textos</div><div class="th2" style="height:50px"><span>🔊 A1</span><button id="xm1b" title="Silenciar el audio de los clips">M</button><input type="range" id="xv1" min="0" max="150" value="100" title="Volumen de la pista A1 (doble clic = 100%)"></div><div class="th2" style="height:48px"><span>🎵 A2</span><button id="xm2b" title="Silenciar música y sonidos">M</button><input type="range" id="xv2" min="0" max="150" value="100" title="Volumen de la pista A2 (doble clic = 100%)"></div></div>
+<div class="trs" id="xtr"><div id="xrl"></div><div id="xl" class="tl"></div><div id="xo"></div><div id="xa1"></div><div id="xa2"></div><div id="xph"></div><div id="xte" class="note">Importá uno o más videos (cualquier formato) para empezar.</div></div>
+<div class="vu"><div id="xm1"><i></i></div><div id="xm2"><i></i></div></div></div>
+<p class="note" style="margin:8px 4px 0">Atajos: Espacio reproduce · S divide · Supr quita el bloque elegido · ←/→ un cuadro (Shift = 1 s) · Ctrl+Z deshace. Arrastrá los bloques para moverlos, el borde derecho de los naranjas y verdes para alargarlos o recortarlos.</p>
+</section>
+<section id="s-v" class="hid"><div class="card cv" style="max-width:640px;margin:0 auto;text-align:center"><h3>Convertir video a MP4</h3>
+<p style="font-size:42px;margin:6px 0">🔄</p>
+<p><b>Para convertir tus videos a MP4, usá FreeConvert.</b></p>
+<p class="note">Los clips y videos que descargás de 166clip salen en formato WebM. Una vez descargados, subilos a esta página y convertilos a MP4 (o al formato que necesites):</p>
+<div class="btns" style="justify-content:center"><a class="cta" href="https://www.freeconvert.com/es/mp4-converter" target="_blank" rel="noopener noreferrer">🌐 Abrir FreeConvert · Convertidor MP4</a></div>
+<ol class="note" style="text-align:left;max-width:420px;margin:16px auto 0"><li>Descargá tu clip desde 166clip.</li><li>Abrí FreeConvert con el botón de arriba.</li><li>Subí el video descargado y elegí MP4.</li><li>Convertí y descargá el resultado.</li></ol>
+<p class="note">166clip no está afiliado a FreeConvert: es un sitio externo y el archivo se sube a sus servidores.</p></div>
+<div class="hid"><div class="card" style="max-width:640px;margin:0 auto"><h3>Convertir video a MP4</h3><p class="note">Elegí un video de cualquier formato (MOV, MKV, AVI, HEVC, WebM…) y pasalo a MP4 o WebM con la resolución que quieras. Se convierte dentro del navegador, sin subirlo a ningún servidor.</p>
+<label>Video</label><input type="file" id="yf" accept="video/*"><p class="note" id="ys"></p>
+<div class="row"><div><label>Resolución</label><select id="yr"></select></div><div><label>Formato</label><select id="yfm"><option value="mp4">MP4 (H.264 + AAC)</option><option value="webm">WebM</option></select></div></div>
+<div class="btns"><button class="p big" id="yg" style="margin:0">🔄 Convertir</button></div><div class="bar hid" id="ypb"><i id="ypi"></i></div><p class="note" id="yst"></p>
+<div id="yrc" class="hid"><video id="yrv" controls playsinline style="width:100%;border-radius:10px;background:#000"></video><div class="btns"><button class="p" id="ydb">⬇ Descargar</button></div></div></div></div></section>
+</main>
+<p class="note" style="margin-top:20px">166clip no está afiliado a Kick, Twitch ni YouTube. Usá solo contenido propio o con permiso del creador.</p>
+</div>
+<div id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
