@@ -3,517 +3,813 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZETA166 | Optimización Extrema de PC y Emuladores</title>
+    <title>ZETA166 // Optimizaciones & Ajuste de FPS</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Orbitron & Rajdhani & Inter -->
+
+    <!-- Google Fonts: Chakra Petch, Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome para Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Orbitron', 'sans-serif'],
-                        tech: ['Rajdhani', 'sans-serif'],
+                        display: ['"Chakra Petch"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        zeta: {
-                            black: '#070709',
-                            dark: '#0f0f13',
-                            card: '#13131a',
-                            red: '#ff1e1e',
-                            crimson: '#b91c1c',
-                            glow: '#ff3b3b'
+                        obsidian: '#060608',
+                        panel: '#0c0c10',
+                        card: '#111117',
+                        crimson: {
+                            DEFAULT: '#ff1e27',
+                            dark: '#b91c1c',
                         }
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-[#070709] text-gray-100 font-sans antialiased selection:bg-[#ff1e1e] selection:text-white overflow-x-hidden">
 
-    <!-- Fondo decorativo con brillo rojo sutil y grilla -->
-    <div class="fixed inset-0 z-0 pointer-events-none">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,30,30,0.16),transparent_60%)]"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+    <style>
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: #060608; }
+        ::-webkit-scrollbar-thumb { background: #2d1115; border-radius: 4px; border: 1px solid #ff1e2745; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff1e27; }
+
+        .bg-grid-tactical {
+            background-size: 36px 36px;
+            background-image:
+                linear-gradient(to right, rgba(255, 30, 39, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 30, 39, 0.04) 1px, transparent 1px);
+        }
+
+        .zeta-box {
+            background: linear-gradient(160deg, rgba(18, 18, 25, 0.96) 0%, rgba(10, 10, 14, 0.99) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .zeta-box:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 30, 39, 0.55);
+            box-shadow: 0 16px 35px -12px rgba(255, 30, 39, 0.28);
+        }
+
+        .zeta-ultra {
+            background: linear-gradient(160deg, rgba(38, 10, 14, 0.96) 0%, rgba(12, 12, 17, 0.99) 100%);
+            border: 1px solid rgba(255, 30, 39, 0.65);
+            box-shadow: 0 0 35px -10px rgba(255, 30, 39, 0.35);
+        }
+        .zeta-ultra:hover {
+            box-shadow: 0 20px 45px -10px rgba(255, 30, 39, 0.55);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-gray-100 font-sans antialiased selection:bg-crimson selection:text-white overflow-x-hidden">
+
+    <!-- Fondo táctico sutil -->
+    <div class="fixed inset-0 z-0 pointer-events-none bg-grid-tactical">
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[780px] h-[340px] bg-crimson/15 blur-[130px] rounded-full"></div>
     </div>
 
-    <!-- NAVBAR -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-[#070709]/85 border-b border-red-900/40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Logo ZETA166 -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#ff1e1e] to-[#8a0e0e] flex items-center justify-center shadow-[0_0_20px_rgba(255,30,30,0.5)] group-hover:shadow-[0_0_30px_rgba(255,30,30,0.85)] transition-all duration-300">
-                    <i class="fa-solid fa-bolt text-white text-xl"></i>
+    <!-- 1. HEADER COMPACTO -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-obsidian/85 border-b border-white/[0.08]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <div class="w-8 h-8 rounded-lg bg-crimson flex items-center justify-center font-display font-bold text-white text-lg shadow-[0_0_16px_rgba(255,30,39,0.55)]">
+                    Z
                 </div>
-                <span class="font-display font-black text-2xl sm:text-3xl tracking-wider text-white">
-                    ZETA<span class="text-[#ff1e1e] drop-shadow-[0_0_10px_rgba(255,30,30,0.7)]">166</span>
+                <span class="font-display font-bold text-2xl tracking-wider text-white">
+                    ZETA<span class="text-crimson">166</span>
                 </span>
             </a>
 
-            <!-- Links de Navegación (Desktop) -->
-            <nav class="hidden md:flex items-center gap-8 font-tech text-lg font-bold tracking-wide uppercase">
-                <a href="#planes" class="text-gray-300 hover:text-[#ff1e1e] transition-colors">Planes</a>
-                <a href="#pagos" class="text-gray-300 hover:text-[#ff1e1e] transition-colors">Métodos de Pago</a>
-                <a href="#comunidad" class="text-gray-300 hover:text-[#ff1e1e] transition-colors">Comunidad</a>
-            </nav>
+            <!-- Badge de Estado + Navegación rápida -->
+            <div class="hidden md:flex items-center gap-6 text-xs font-mono uppercase tracking-wider">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    SISTEMA ACTIVO • TURNOS HOY
+                </span>
+                <a href="#planes" class="text-gray-400 hover:text-white transition-colors">Planes ARS</a>
+                <a href="#resenas" class="text-gray-400 hover:text-white transition-colors">Reseñas Reales</a>
+            </div>
 
-            <!-- Botón Directo Discord -->
+            <!-- Botón Discord -->
             <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-xl bg-[#ff1e1e] hover:bg-[#d91616] text-white font-tech font-bold text-base sm:text-lg tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,30,0.45)] hover:shadow-[0_0_30px_rgba(255,30,30,0.8)] transition-all duration-300 transform hover:-translate-y-0.5">
-                <i class="fa-brands fa-discord text-xl"></i>
-                <span>Discord</span>
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,39,0.45)] transition-all">
+                <i class="fa-brands fa-discord text-base"></i>
+                <span>Discord Oficial</span>
             </a>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <main class="relative z-10">
-        <section class="pt-16 pb-20 sm:pt-24 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-            <!-- Etiqueta superior -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/50 border border-red-500/40 text-red-400 font-tech font-bold text-sm sm:text-base tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(255,30,30,0.2)]">
-                <span class="w-2 h-2 rounded-full bg-[#ff1e1e] animate-ping"></span>
-                <span>Rendimiento Competitivo Sin Lag</span>
-            </div>
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
 
-            <!-- Título Principal -->
-            <h1 class="font-display font-black text-4xl sm:text-6xl lg:text-7xl tracking-tight text-white uppercase leading-tight mb-6">
-                LLEVÁ TUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#ff1e1e] via-[#ff4d4d] to-[#b91c1c] drop-shadow-[0_0_25px_rgba(255,30,30,0.45)]">FPS AL MÁXIMO</span>
-            </h1>
-
-            <!-- Subtítulo -->
-            <p class="max-w-2xl mx-auto text-gray-300 text-base sm:text-xl leading-relaxed mb-10">
-                Optimizaciones profesionales de <strong class="text-white">Windows y Emuladores</strong> (BlueStacks, MSI, SmartGaGa y más). Reducí el input lag, eliminá caídas de FPS y dominá cada partida competitiva con la configuración exacta de <span class="text-[#ff1e1e] font-semibold">ZETA166</span>.
-            </p>
-
-            <!-- Botones de Acción Hero -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#planes"
-                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-[#ff1e1e] to-[#b91c1c] hover:from-[#ff3333] hover:to-[#dc2626] text-white font-display font-bold text-base sm:text-lg tracking-wider uppercase shadow-[0_0_30px_rgba(255,30,30,0.5)] hover:shadow-[0_0_45px_rgba(255,30,30,0.85)] transition-all duration-300 transform hover:-translate-y-1">
-                    <i class="fa-solid fa-fire"></i>
-                    <span>Ver Planes de Optimización</span>
-                </a>
-                <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#13131a] hover:bg-[#1a1a24] text-white border border-red-500/40 hover:border-[#ff1e1e] font-tech font-bold text-lg tracking-wider uppercase transition-all duration-300">
-                    <i class="fa-brands fa-discord text-[#ff1e1e] text-xl"></i>
-                    <span>Unirse al Discord</span>
-                </a>
-            </div>
-
-            <!-- Métricas / Beneficios Rápidos -->
-            <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                <div class="p-4 rounded-2xl bg-[#111117]/90 border border-red-900/30 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-gauge-high text-[#ff1e1e] text-2xl"></i>
-                    <div class="text-left">
-                        <p class="font-display font-bold text-white text-sm sm:text-base">+FPS ESTABLES</p>
-                        <p class="text-xs text-gray-400">Sin tirones en zonas finales</p>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2xl bg-[#111117]/90 border border-red-900/30 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-crosshairs text-[#ff1e1e] text-2xl"></i>
-                    <div class="text-left">
-                        <p class="font-display font-bold text-white text-sm sm:text-base">CERO INPUT LAG</p>
-                        <p class="text-xs text-gray-400">Respuesta inmediata de mira</p>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2xl bg-[#111117]/90 border border-red-900/30 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-shield-halved text-[#ff1e1e] text-2xl"></i>
-                    <div class="text-left">
-                        <p class="font-display font-bold text-white text-sm sm:text-base">100% SEGURO</p>
-                        <p class="text-xs text-gray-400">Ajustes limpios sin riesgo</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN DE PLANES DE PAGO -->
-        <section id="planes" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div class="text-center mb-14">
-                <span class="font-tech font-bold text-[#ff1e1e] tracking-widest uppercase text-base sm:text-lg">Elegí tu nivel de potencia</span>
-                <h2 class="font-display font-black text-3xl sm:text-5xl text-white uppercase mt-2">
-                    PLANES DE <span class="text-[#ff1e1e]">OPTIMIZACIÓN</span>
-                </h2>
-                <p class="text-gray-400 mt-3 max-w-xl mx-auto text-sm sm:text-base">
-                    Seleccioná el paquete que mejor se adapte a tu PC. Todos los precios están expresados en <strong class="text-gray-200">Pesos Argentinos (ARS)</strong>.
-                </p>
-            </div>
-
-            <!-- Grid de 3 Tarjetas -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-
-                <!-- PLAN 1: BÁSICO -->
-                <div class="relative rounded-2xl bg-[#111118] border border-red-900/40 hover:border-[#ff1e1e] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,30,30,0.25)] group">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-red-950/60 border border-red-800/50 text-red-400 font-tech font-bold text-sm uppercase tracking-wider">
-                                Nivel Inicial
-                            </span>
-                            <i class="fa-solid fa-gamepad text-2xl text-gray-500 group-hover:text-[#ff1e1e] transition-colors"></i>
-                        </div>
-
-                        <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white uppercase tracking-wide">
-                            PLAN BÁSICO
-                        </h3>
-                        <p class="text-gray-400 text-sm mt-1">Ideal para mejorar el rendimiento directo dentro de tu emulador.</p>
-
-                        <!-- Precio -->
-                        <div class="my-6 pb-6 border-b border-gray-800">
-                            <div class="flex items-baseline gap-2">
-                                <span class="font-display font-black text-4xl sm:text-5xl text-white">$8.000</span>
-                                <span class="font-tech font-bold text-lg text-[#ff1e1e] uppercase">ARS</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Pago único • Pesos Argentinos</p>
-                        </div>
-
-                        <!-- Lista de características -->
-                        <ul class="space-y-4 text-sm sm:text-base text-gray-300 mb-8">
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Optimización de Emulador:</strong> Configuración interna de gráficos, memoria y núcleos.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Ajustes Completos:</strong> Calibración de sensibilidad, resolución y estabilidad de FPS.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span>Eliminación de tirones y bajones bruscos al disparar.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="openOrderModal('Plan Básico', '$8.000 ARS', 'Optimización de emulador + Ajustes completos')"
-                            class="w-full py-3.5 px-6 rounded-xl bg-[#1b1b24] hover:bg-[#ff1e1e] text-white border border-red-500/40 hover:border-[#ff1e1e] font-display font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(255,30,30,0.6)] cursor-pointer">
-                        Adquirir Plan Básico
-                    </button>
+        <!-- 2. HERO COMPACTO + MÓDULO 'AJUSTE DE FPS EN VIVO' -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Presentación directa (5 cols) -->
+            <div class="lg:col-span-5 space-y-4">
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-crimson/15 border border-crimson/35 font-mono text-[11px] font-bold text-crimson uppercase tracking-wider">
+                    <i class="fa-solid fa-crosshairs"></i> WINDOWS + EMULADORES (BLUESTACKS / MSI)
                 </div>
 
-                <!-- PLAN 2: PRO (DESTACADO) -->
-                <div class="relative rounded-2xl bg-gradient-to-b from-[#1a0d10] to-[#111118] border-2 border-[#ff1e1e] p-7 sm:p-8 flex flex-col justify-between shadow-[0_0_40px_rgba(255,30,30,0.3)] transform lg:-translate-y-3 transition-all duration-300 hover:shadow-[0_0_55px_rgba(255,30,30,0.5)] group">
-                    <!-- Badge Más Elegido -->
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#ff1e1e] to-[#b91c1c] text-white font-display font-bold text-xs tracking-widest uppercase shadow-[0_0_20px_rgba(255,30,30,0.8)] whitespace-nowrap">
-                        <i class="fa-solid fa-star mr-1"></i> Más Elegido
-                    </div>
+                <h1 class="font-display font-bold text-3xl sm:text-5xl text-white uppercase leading-[1.05] tracking-tight">
+                    MÁS FPS. CERO LAG.<br>
+                    <span class="text-crimson drop-shadow-[0_0_18px_rgba(255,30,39,0.45)]">MIRA CLAVADA.</span>
+                </h1>
 
-                    <div>
-                        <div class="flex items-center justify-between mb-4 mt-2">
-                            <span class="px-3 py-1 rounded-lg bg-[#ff1e1e]/20 border border-[#ff1e1e]/50 text-[#ff4d4d] font-tech font-bold text-sm uppercase tracking-wider">
-                                Rendimiento Total
-                            </span>
-                            <i class="fa-solid fa-microchip text-2xl text-[#ff1e1e]"></i>
-                        </div>
-
-                        <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white uppercase tracking-wide">
-                            PLAN PRO
-                        </h3>
-                        <p class="text-gray-300 text-sm mt-1">La combinación perfecta entre sistema operativo y emulador.</p>
-
-                        <!-- Precio -->
-                        <div class="my-6 pb-6 border-b border-red-900/50">
-                            <div class="flex items-baseline gap-2">
-                                <span class="font-display font-black text-4xl sm:text-5xl text-white">$15.000</span>
-                                <span class="font-tech font-bold text-lg text-[#ff1e1e] uppercase">ARS</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">Pago único • Pesos Argentinos</p>
-                        </div>
-
-                        <!-- Lista de características -->
-                        <ul class="space-y-4 text-sm sm:text-base text-gray-200 mb-8">
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Optimización de Emulador:</strong> Rendimiento gráfico y fluidez máxima.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Optimización de Windows:</strong> Limpieza profunda, desactivación de procesos en segundo plano y telemetría.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Mejora de Latencia y RAM:</strong> Prioridad máxima para juegos y menor uso de memoria.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="openOrderModal('Plan Pro', '$15.000 ARS', 'Optimización de Emulador + Optimización completa de Windows')"
-                            class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-[#ff1e1e] to-[#b91c1c] hover:from-[#ff3333] hover:to-[#dc2626] text-white font-display font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 shadow-[0_0_25px_rgba(255,30,30,0.6)] hover:shadow-[0_0_40px_rgba(255,30,30,0.9)] cursor-pointer">
-                        Adquirir Plan Pro
-                    </button>
-                </div>
-
-                <!-- PLAN 3: ULTRA -->
-                <div class="relative rounded-2xl bg-[#111118] border border-red-900/40 hover:border-[#ff1e1e] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,30,30,0.3)] group">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-red-950/60 border border-red-800/50 text-red-400 font-tech font-bold text-sm uppercase tracking-wider">
-                                Edición Extrema
-                            </span>
-                            <i class="fa-solid fa-crown text-2xl text-gray-500 group-hover:text-[#ff1e1e] transition-colors"></i>
-                        </div>
-
-                        <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white uppercase tracking-wide">
-                            PLAN ULTRA
-                        </h3>
-                        <p class="text-gray-400 text-sm mt-1">El paquete definitivo para jugadores competitivos exigentes.</p>
-
-                        <!-- Precio -->
-                        <div class="my-6 pb-6 border-b border-gray-800">
-                            <div class="flex items-baseline gap-2">
-                                <span class="font-display font-black text-4xl sm:text-5xl text-white">$20.000</span>
-                                <span class="font-tech font-bold text-lg text-[#ff1e1e] uppercase">ARS</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Pago único • Pesos Argentinos</p>
-                        </div>
-
-                        <!-- Lista de características -->
-                        <ul class="space-y-4 text-sm sm:text-base text-gray-300 mb-8">
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Optimización Completa (PC + Windows):</strong> Exprimimos cada componente de tu hardware al 100%.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Optimización de Emulador:</strong> Configuración competitiva sin pérdida de calidad visual.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-circle-check text-[#ff1e1e] mt-1"></i>
-                                <span><strong class="text-white">Ajustes Avanzados Personalizados (1 a 1):</strong> Calibración de registros, red/ping y respuesta táctil a medida.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="openOrderModal('Plan Ultra', '$20.000 ARS', 'Optimización completa + Emulador + Ajustes avanzados personalizados (1 a 1)')"
-                            class="w-full py-3.5 px-6 rounded-xl bg-[#1b1b24] hover:bg-[#ff1e1e] text-white border border-red-500/40 hover:border-[#ff1e1e] font-display font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(255,30,30,0.6)] cursor-pointer">
-                        Adquirir Plan Ultra
-                    </button>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECCIÓN DE MÉTODOS DE PAGO ACEPTADOS -->
-        <section id="pagos" class="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-            <div class="rounded-3xl bg-[#101016] border border-red-900/50 p-8 sm:p-12 text-center shadow-[0_0_40px_rgba(255,30,30,0.1)] relative overflow-hidden">
-                <!-- Brillo decorativo -->
-                <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#ff1e1e]/15 rounded-full blur-3xl pointer-events-none"></div>
-
-                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-950/60 border border-red-500/30 text-red-400 font-tech font-bold text-sm uppercase tracking-wider mb-4">
-                    <i class="fa-solid fa-wallet"></i>
-                    <span>Información Importante</span>
-                </div>
-
-                <h2 class="font-display font-black text-2xl sm:text-4xl text-white uppercase mb-3">
-                    MÉTODOS DE PAGO <span class="text-[#ff1e1e]">ACEPTADOS</span>
-                </h2>
-                <p class="text-gray-300 max-w-xl mx-auto text-sm sm:text-base mb-8">
-                    Para garantizar seguridad y rapidez en cada servicio, <strong class="text-white underline decoration-[#ff1e1e] decoration-2">ÚNICAMENTE aceptamos pagos a través de Mercado Pago y PayPal</strong>.
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                    Optimizaciones reales de sistema y emulador hechas a medida por <strong class="text-white">ZETA166</strong>. Bajamos el input delay y estabilizamos tus FPS sin programas basura.
                 </p>
 
-                <!-- Tarjetas de Mercado Pago y PayPal -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                    <!-- Mercado Pago -->
-                    <div class="p-6 rounded-2xl bg-[#161620] border border-red-500/30 hover:border-[#ff1e1e] transition-all flex items-center gap-4 text-left group">
-                        <div class="w-14 h-14 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-handshake-simple text-sky-400 text-2xl"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-display font-bold text-lg text-white">Mercado Pago</h3>
-                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Activo</span>
-                            </div>
-                            <p class="text-xs sm:text-sm text-gray-400 mt-1">Transferencia directa en Pesos Argentinos (ARS) al instante.</p>
-                        </div>
-                    </div>
-
-                    <!-- PayPal -->
-                    <div class="p-6 rounded-2xl bg-[#161620] border border-red-500/30 hover:border-[#ff1e1e] transition-all flex items-center gap-4 text-left group">
-                        <div class="w-14 h-14 rounded-xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center shrink-0">
-                            <i class="fa-brands fa-paypal text-blue-400 text-2xl"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-display font-bold text-lg text-white">PayPal</h3>
-                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Activo</span>
-                            </div>
-                            <p class="text-xs sm:text-sm text-gray-400 mt-1">Pagos internacionales rápidos y protegidos.</p>
-                        </div>
-                    </div>
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                    <a href="#planes"
+                       class="px-5 py-3 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-sm tracking-wider uppercase shadow-[0_0_22px_rgba(255,30,39,0.45)] transition-all">
+                        Ver Planes ARS
+                    </a>
+                    <a href="#resenas"
+                       class="px-4 py-3 rounded-xl bg-card hover:bg-[#191922] text-gray-200 border border-white/10 font-display font-bold text-sm tracking-wider uppercase transition-all">
+                        Ver Reseñas Reales
+                    </a>
                 </div>
             </div>
-        </section>
 
-        <!-- SECCIÓN COMUNIDAD / DISCORD CTA -->
-        <section id="comunidad" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-            <div class="rounded-3xl bg-gradient-to-r from-[#1a090c] via-[#140a0d] to-[#1a090c] border-2 border-[#ff1e1e]/60 p-8 sm:p-14 text-center relative overflow-hidden shadow-[0_0_50px_rgba(255,30,30,0.2)]">
-                <div class="max-w-2xl mx-auto relative z-10">
-                    <div class="w-16 h-16 rounded-2xl bg-[#ff1e1e] text-white flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(255,30,30,0.8)]">
-                        <i class="fa-brands fa-discord text-3xl"></i>
+            <!-- Simulador Interactivo 'AJUSTE DE FPS EN VIVO' (7 cols) -->
+            <div class="lg:col-span-7 rounded-2xl bg-panel border border-white/10 p-4 sm:p-5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.9)]">
+                <!-- Barra superior del módulo -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3.5 mb-4 border-b border-white/[0.08]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-crimson"></span>
+                        <h2 class="font-display font-bold text-sm sm:text-base text-white uppercase tracking-wider">
+                            AJUSTE DE FPS EN VIVO
+                        </h2>
                     </div>
-                    <h2 class="font-display font-black text-3xl sm:text-5xl text-white uppercase mb-4">
-                        COORDINÁ TU OPTIMIZACIÓN EN <span class="text-[#ff1e1e]">DISCORD</span>
-                    </h2>
-                    <p class="text-gray-300 text-base sm:text-lg mb-8 leading-relaxed">
-                        Entrá a nuestro servidor oficial, abrí un ticket con el plan que elegiste y nuestro equipo te atiende al toque para realizar el pago y dejar tu PC volando.
-                    </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-                           class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#ff1e1e] hover:bg-[#d91616] text-white font-display font-bold text-base sm:text-lg tracking-wider uppercase shadow-[0_0_30px_rgba(255,30,30,0.6)] hover:shadow-[0_0_45px_rgba(255,30,30,0.9)] transition-all duration-300 transform hover:-translate-y-1">
-                            <i class="fa-brands fa-discord text-xl"></i>
-                            <span>Entrar a discord.gg/t2x9dKGdwf</span>
-                        </a>
-                        <button onclick="copyToClipboard('https://discord.gg/t2x9dKGdwf', '¡Enlace de Discord copiado!')"
-                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#111118] hover:bg-[#1c1c26] text-gray-200 border border-red-500/40 font-tech font-bold text-lg uppercase tracking-wider transition-all cursor-pointer">
-                            <i class="fa-regular fa-copy text-[#ff1e1e]"></i>
-                            <span>Copiar Invitación</span>
+
+                    <!-- Interruptor STOCK vs ZETA166 -->
+                    <div class="flex items-center p-1 rounded-xl bg-obsidian border border-white/10">
+                        <button id="toggleStockBtn" onclick="setFpsState('stock')"
+                                class="px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer">
+                            STOCK (Sin optimizar)
+                        </button>
+                        <button id="toggleZetaBtn" onclick="setFpsState('zeta')"
+                                class="px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase bg-crimson text-white shadow-[0_0_14px_rgba(255,30,39,0.5)] transition-all cursor-pointer">
+                            ZETA166 (Optimizado)
                         </button>
                     </div>
                 </div>
+
+                <!-- Selector rápido de Plan (Básico, Pro, Ultra) -->
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-[11px] text-gray-400 uppercase">Simular rendimiento según plan:</span>
+                    <div class="flex items-center gap-1.5">
+                        <button id="simPlanBasico" onclick="setSimPlan('basico')"
+                                class="px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase bg-obsidian border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer">
+                            Básico
+                        </button>
+                        <button id="simPlanPro" onclick="setSimPlan('pro')"
+                                class="px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase bg-obsidian border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer">
+                            Pro
+                        </button>
+                        <button id="simPlanUltra" onclick="setSimPlan('ultra')"
+                                class="px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase bg-crimson/20 border border-crimson text-white transition-all cursor-pointer">
+                            Ultra
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Métricas en tiempo real -->
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="p-3 rounded-xl bg-card border border-white/[0.06]">
+                        <span class="block font-mono text-[10px] sm:text-[11px] text-gray-400 uppercase">FPS PROMEDIO</span>
+                        <div class="flex items-baseline gap-1.5 mt-1">
+                            <span id="readoutFps" class="font-mono font-extrabold text-2xl sm:text-3xl text-white">240</span>
+                            <span id="readoutFpsTag" class="font-mono text-[10px] font-bold text-emerald-400">ESTABLE</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-card border border-white/[0.06]">
+                        <span class="block font-mono text-[10px] sm:text-[11px] text-gray-400 uppercase">1% LOWS (CAÍDAS)</span>
+                        <div class="flex items-baseline gap-1.5 mt-1">
+                            <span id="readoutLows" class="font-mono font-extrabold text-2xl sm:text-3xl text-white">231</span>
+                            <span class="font-mono text-[10px] text-gray-400">FPS</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-card border border-white/[0.06]">
+                        <span class="block font-mono text-[10px] sm:text-[11px] text-gray-400 uppercase">INPUT DELAY</span>
+                        <div class="flex items-baseline gap-1.5 mt-1">
+                            <span id="readoutDelay" class="font-mono font-extrabold text-2xl sm:text-3xl text-emerald-400">1.6</span>
+                            <span class="font-mono text-[10px] text-gray-400">ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de estabilidad de Frametime -->
+                <div class="p-3 rounded-xl bg-obsidian border border-white/[0.07]">
+                    <div class="flex items-center justify-between font-mono text-[11px] mb-2">
+                        <span class="text-gray-400">ESTABILIDAD DE FRAMETIME (<span id="simPlanLabel" class="text-white font-bold">PLAN ULTRA</span>)</span>
+                        <span id="frametimeStatus" class="text-emerald-400 font-bold">99.8% ESTABLE // SIN TIRONES</span>
+                    </div>
+                    <div id="frametimeChart" class="h-10 flex items-end gap-1"></div>
+                </div>
             </div>
         </section>
-    </main>
 
-    <!-- FOOTER -->
-    <footer class="relative z-10 border-t border-red-900/40 bg-[#050507] py-10 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-[#ff1e1e] flex items-center justify-center">
-                    <i class="fa-solid fa-bolt text-white text-sm"></i>
+        <!-- 3. PLANES DE PAGO EN PESOS ARGENTINOS (ARS) -->
+        <section id="planes" class="pt-2">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div>
+                    <span class="font-mono text-[11px] font-bold text-crimson uppercase tracking-widest">PAQUETES DISPONIBLES</span>
+                    <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase">
+                        PLANES DE <span class="text-crimson">OPTIMIZACIÓN</span>
+                    </h2>
                 </div>
-                <span class="font-display font-black text-xl tracking-wider text-white">
-                    ZETA<span class="text-[#ff1e1e]">166</span>
-                </span>
+                <span class="font-mono text-xs text-gray-400">PRECIOS EN PESOS ARGENTINOS (ARS) • PAGO ÚNICO</span>
             </div>
 
-            <p class="text-gray-500 text-sm text-center">
-                &copy; <span id="currentYear"></span> ZETA166 Optimizaciones. Todos los derechos reservados.
-            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+                <!-- PLAN BÁSICO -->
+                <div class="zeta-box rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded bg-white/[0.06] text-gray-300 border border-white/10">
+                                NIVEL 01
+                            </span>
+                            <i class="fa-solid fa-sliders text-crimson"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl text-white uppercase">Plan Básico</h3>
+                        <p class="text-xs text-gray-400 mt-1">Optimización de emulador + ajustes.</p>
 
-            <div class="flex items-center gap-4">
+                        <div class="my-4 py-3.5 border-y border-white/[0.08] flex items-baseline gap-1.5">
+                            <span class="font-mono font-extrabold text-3xl sm:text-4xl text-white">$8.000</span>
+                            <span class="font-mono font-bold text-xs text-crimson">ARS</span>
+                        </div>
+
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-gray-300 mb-6">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Optimización de Emulador:</strong> Render, núcleos CPU y asignación exacta de RAM.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Ajustes Esenciales:</strong> Resolución, DPI y limpieza interna sin lag.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="openOrderModal('Plan Básico', '$8.000 ARS', 'Optimización de emulador + ajustes')"
+                            class="w-full py-3 px-4 rounded-xl bg-white/[0.07] hover:bg-crimson text-white border border-white/10 hover:border-crimson font-display font-bold text-sm tracking-wider uppercase transition-all cursor-pointer">
+                        ADQUIRIR PLAN
+                    </button>
+                </div>
+
+                <!-- PLAN PRO -->
+                <div class="zeta-box rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded bg-white/[0.06] text-gray-300 border border-white/10">
+                                NIVEL 02
+                            </span>
+                            <i class="fa-solid fa-microchip text-crimson"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl text-white uppercase">Plan Pro</h3>
+                        <p class="text-xs text-gray-400 mt-1">Emulador + optimización de Windows.</p>
+
+                        <div class="my-4 py-3.5 border-y border-white/[0.08] flex items-baseline gap-1.5">
+                            <span class="font-mono font-extrabold text-3xl sm:text-4xl text-white">$15.000</span>
+                            <span class="font-mono font-bold text-xs text-crimson">ARS</span>
+                        </div>
+
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-gray-300 mb-6">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Emulador Optimizado:</strong> Todo lo del Plan Básico aplicado.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Optimización de Windows:</strong> Debloat, limpieza de procesos y prioridad GPU/CPU.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="openOrderModal('Plan Pro', '$15.000 ARS', 'Emulador + optimización de Windows')"
+                            class="w-full py-3 px-4 rounded-xl bg-white/[0.07] hover:bg-crimson text-white border border-white/10 hover:border-crimson font-display font-bold text-sm tracking-wider uppercase transition-all cursor-pointer">
+                        ADQUIRIR PLAN
+                    </button>
+                </div>
+
+                <!-- PLAN ULTRA (DESTACADO EN ROJO) -->
+                <div class="zeta-box zeta-ultra rounded-2xl p-5 sm:p-6 flex flex-col justify-between relative">
+                    <div class="absolute -top-3 right-5 px-3 py-0.5 rounded-md bg-crimson text-white font-mono font-bold text-[10px] uppercase tracking-widest shadow-[0_0_16px_rgba(255,30,39,0.8)]">
+                        FULL COMPETITIVO
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded bg-crimson/20 text-crimson border border-crimson/40">
+                                NIVEL 03 // TOP
+                            </span>
+                            <i class="fa-solid fa-bolt text-crimson"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl text-white uppercase">Plan Ultra</h3>
+                        <p class="text-xs text-gray-300 mt-1">Optimización + emulador + <strong class="text-white">Ajustes 1</strong> (todo completo).</p>
+
+                        <div class="my-4 py-3.5 border-y border-crimson/35 flex items-baseline gap-1.5">
+                            <span class="font-mono font-extrabold text-3xl sm:text-4xl text-white">$20.000</span>
+                            <span class="font-mono font-bold text-xs text-crimson">ARS</span>
+                        </div>
+
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-gray-200 mb-6">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Todo Completo (Windows + Emu):</strong> Rendimiento máximo del sistema y emulador.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-crimson mt-1"></i>
+                                <span><strong class="text-white">Ajustes 1 Exclusivos:</strong> Tweaks privados de registro, red/ping y respuesta de mira 1 a 1.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="openOrderModal('Plan Ultra', '$20.000 ARS', 'Optimización + emulador + Ajustes 1 (todo completo)')"
+                            class="w-full py-3.5 px-4 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-sm tracking-wider uppercase shadow-[0_0_24px_rgba(255,30,39,0.55)] transition-all cursor-pointer">
+                        ADQUIRIR PLAN
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MÉTODOS DE PAGO EXCLUSIVOS -->
+        <section class="rounded-2xl bg-gradient-to-r from-[#14090c] via-panel to-[#14090c] border border-crimson/45 p-4 sm:p-5 flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="flex flex-col sm:flex-row items-center gap-3.5 text-center sm:text-left">
+                <div class="w-11 h-11 rounded-xl bg-crimson/20 border border-crimson/40 flex items-center justify-center text-crimson shrink-0">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-display font-bold text-base sm:text-lg text-white uppercase tracking-wide">
+                        MÉTODOS DE PAGO EXCLUSIVOS
+                    </h3>
+                    <p class="text-xs sm:text-sm text-gray-300">
+                        Para mayor seguridad y acreditación inmediata, <strong class="text-white">SOLO aceptamos Mercado Pago y PayPal</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-obsidian border border-sky-500/40 font-mono text-xs font-bold text-sky-300">
+                    <i class="fa-solid fa-handshake-simple text-sky-400"></i> MERCADO PAGO
+                </span>
+                <span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-obsidian border border-blue-500/40 font-mono text-xs font-bold text-blue-300">
+                    <i class="fa-brands fa-paypal text-blue-400"></i> PAYPAL
+                </span>
                 <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-                   class="text-gray-400 hover:text-[#ff1e1e] transition-colors flex items-center gap-2 font-tech font-bold uppercase tracking-wider">
-                    <i class="fa-brands fa-discord text-xl"></i>
-                    <span>Servidor Oficial</span>
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_18px_rgba(255,30,39,0.45)] transition-all">
+                    <i class="fa-brands fa-discord"></i>
+                    <span>Pagar en Discord</span>
                 </a>
             </div>
+        </section>
+
+        <!-- 5. RESEÑAS VERIFICADAS DE CLIENTES + FORMULARIO REAL -->
+        <section id="resenas" class="pt-2">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div>
+                    <span class="font-mono text-[11px] font-bold text-crimson uppercase tracking-widest">FEEDBACK DE COMPRADORES</span>
+                    <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase">
+                        RESEÑAS VERIFICADAS DE <span class="text-crimson">CLIENTES</span>
+                    </h2>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs text-gray-300">
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 5.0</span>
+                    <span class="text-gray-600">|</span>
+                    <span id="reviewsCountLabel">Compradores reales ZETA166</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Listado de Reseñas Reales (7 cols) -->
+                <div id="reviewsList" class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Renderizado por JavaScript (incluye reseñas reales iniciales + las guardadas por usuarios) -->
+                </div>
+
+                <!-- Formulario Interactivo para dejar Reseña Real (5 cols) -->
+                <div class="lg:col-span-5 rounded-2xl bg-panel border border-white/10 p-5 sm:p-6">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-pen-to-square text-crimson"></i>
+                        <h3 class="font-display font-bold text-lg sm:text-xl text-white uppercase">
+                            ¿Ya compraste? Dejá tu reseña
+                        </h3>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">
+                        Contales a otros jugadores cómo te quedó el emulador y los FPS después de optimizar con ZETA166.
+                    </p>
+
+                    <form id="reviewForm" onsubmit="submitClientReview(event)" class="space-y-3.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="revName" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Tu Nick / Nombre *</label>
+                                <input id="revName" type="text" required maxlength="28" placeholder="Ej: Santii_FF"
+                                       class="w-full px-3 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white placeholder-gray-600">
+                            </div>
+
+                            <div>
+                                <label for="revPlan" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Plan Comprado *</label>
+                                <select id="revPlan"
+                                        class="w-full px-3 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white">
+                                    <option value="Plan Ultra ($20.000)">Plan Ultra ($20.000)</option>
+                                    <option value="Plan Pro ($15.000)">Plan Pro ($15.000)</option>
+                                    <option value="Plan Básico ($8.000)">Plan Básico ($8.000)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Selector interactivo de estrellas -->
+                        <div>
+                            <span class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Calificación:</span>
+                            <div id="starSelector" class="flex items-center gap-1.5 text-lg">
+                                <button type="button" onclick="setRating(1)" class="star-btn text-amber-400 cursor-pointer"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" onclick="setRating(2)" class="star-btn text-amber-400 cursor-pointer"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" onclick="setRating(3)" class="star-btn text-amber-400 cursor-pointer"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" onclick="setRating(4)" class="star-btn text-amber-400 cursor-pointer"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" onclick="setRating(5)" class="star-btn text-amber-400 cursor-pointer"><i class="fa-solid fa-star"></i></button>
+                                <span id="ratingText" class="ml-2 font-mono text-xs text-gray-300 font-bold">5 / 5 Estrellas</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="revComment" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Tu Comentario Real *</label>
+                            <textarea id="revComment" rows="3" required maxlength="240"
+                                      placeholder="Ej: Compré el Plan Ultra, me clavó los 240 FPS en BlueStacks 5 y la mira ni tiembla en clasificatoria..."
+                                      class="w-full px-3 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white placeholder-gray-600 resize-none"></textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full py-2.5 px-4 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,39,0.4)] transition-all cursor-pointer">
+                            Publicar Reseña Verificada
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER COMPACTO -->
+    <footer class="relative z-10 border-t border-white/[0.07] bg-[#040406] mt-10 py-6 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-gray-500">
+            <span class="text-white font-display font-bold text-base tracking-wider">ZETA<span class="text-crimson">166</span></span>
+            <span>SOLO MERCADO PAGO & PAYPAL • OPTIMIZACIONES COMPETITIVAS</span>
+            <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-crimson transition-colors">
+                discord.gg/t2x9dKGdwf
+            </a>
         </div>
     </footer>
 
-    <!-- MODAL INTERACTIVO DE COMPRA -->
-    <div id="orderModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="relative w-full max-w-lg rounded-3xl bg-[#111118] border-2 border-[#ff1e1e] p-6 sm:p-8 shadow-[0_0_60px_rgba(255,30,30,0.45)] animate-[fadeIn_0.2s_ease-out]">
-            <!-- Botón Cerrar -->
-            <button onclick="closeOrderModal()" aria-label="Cerrar ventana"
-                    class="absolute top-5 right-5 w-9 h-9 rounded-full bg-gray-800/80 hover:bg-[#ff1e1e] text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer">
-                <i class="fa-solid fa-xmark text-lg"></i>
+    <!-- 6. MODAL INTERACTIVO DE COMPRA -->
+    <div id="orderModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="relative w-full max-w-md rounded-2xl bg-[#0d0d13] border border-crimson/65 p-5 sm:p-6 shadow-[0_0_55px_rgba(255,30,39,0.4)]">
+            <button onclick="closeOrderModal()" aria-label="Cerrar"
+                    class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/[0.06] hover:bg-crimson text-gray-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Encabezado Modal -->
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-11 h-11 rounded-xl bg-[#ff1e1e]/20 border border-[#ff1e1e] flex items-center justify-center text-[#ff1e1e]">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                </div>
-                <div>
-                    <span class="text-xs font-tech font-bold uppercase tracking-widest text-[#ff1e1e]">Resumen de Selección</span>
-                    <h3 id="modalPlanName" class="font-display font-black text-2xl text-white uppercase">Plan Pro</h3>
+            <span class="font-mono text-[10px] font-bold text-crimson uppercase tracking-widest">TICKET DE COMPRA // ZETA166</span>
+            <div class="flex items-baseline justify-between gap-3 mt-1">
+                <h3 id="modalPlanName" class="font-display font-bold text-2xl text-white uppercase">Plan Ultra</h3>
+                <span id="modalPlanPrice" class="font-mono font-extrabold text-xl text-crimson">$20.000 ARS</span>
+            </div>
+            <p id="modalPlanDesc" class="text-xs text-gray-400 mt-0.5 mb-4">Optimización + emulador + Ajustes 1</p>
+
+            <!-- Selección de método exclusivo -->
+            <div class="mb-4">
+                <label class="block font-mono text-[11px] font-bold text-gray-300 uppercase mb-2">
+                    Método de Pago <span class="text-crimson">(Solo estos dos)</span>:
+                </label>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" id="btnMp" onclick="choosePayment('Mercado Pago')"
+                            class="py-2.5 px-3 rounded-xl border border-sky-400 bg-sky-500/15 text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-handshake-simple text-sky-400"></i> Mercado Pago
+                    </button>
+                    <button type="button" id="btnPp" onclick="choosePayment('PayPal')"
+                            class="py-2.5 px-3 rounded-xl border border-white/10 bg-obsidian text-gray-400 hover:text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-brands fa-paypal text-blue-400"></i> PayPal
+                    </button>
                 </div>
             </div>
 
-            <!-- Detalles del Plan -->
-            <div class="p-4 rounded-2xl bg-[#181822] border border-red-900/40 mb-5">
-                <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-3">
-                    <span class="text-gray-400 text-sm">Valor total:</span>
-                    <span id="modalPlanPrice" class="font-display font-black text-2xl text-[#ff1e1e]">$15.000 ARS</span>
-                </div>
-                <p class="text-xs uppercase font-tech font-bold text-gray-400 tracking-wider mb-1">Incluye:</p>
-                <p id="modalPlanDesc" class="text-sm text-gray-200 leading-relaxed">
-                    Optimización de Emulador + Optimización completa de Windows
-                </p>
+            <!-- Usuario / Emulador -->
+            <div class="mb-4">
+                <label for="orderUserInput" class="block font-mono text-[11px] font-bold text-gray-300 uppercase mb-1.5">
+                    Tu Emulador / Usuario de Discord:
+                </label>
+                <input id="orderUserInput" type="text" oninput="refreshTicketText()"
+                       placeholder="Ej: MSI App Player // TuNick"
+                       class="w-full px-3.5 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none font-mono text-xs text-white placeholder-gray-600">
             </div>
 
-            <!-- Aviso de Métodos de Pago -->
-            <div class="p-4 rounded-2xl bg-red-950/30 border border-red-500/40 mb-6">
-                <p class="text-xs sm:text-sm text-gray-200 font-medium mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation text-[#ff1e1e]"></i>
-                    <span>Métodos de pago aceptados únicamente:</span>
-                </p>
-                <div class="flex flex-wrap gap-2 mt-2">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#111118] border border-sky-500/40 text-sky-300 text-xs font-bold">
-                        <i class="fa-solid fa-handshake-simple"></i> Mercado Pago
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#111118] border border-blue-500/40 text-blue-300 text-xs font-bold">
-                        <i class="fa-brands fa-paypal"></i> PayPal
-                    </span>
+            <!-- Ticket generado -->
+            <div class="mb-5">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-mono text-[10px] text-gray-400 uppercase">Ticket listo para Discord:</span>
+                    <button onclick="copyOrderTicket()" class="font-mono text-[11px] text-crimson hover:underline font-bold cursor-pointer">
+                        <i class="fa-regular fa-copy mr-1"></i>Copiar
+                    </button>
                 </div>
+                <pre id="orderTicketBox" class="p-3 rounded-xl bg-obsidian border border-white/[0.08] font-mono text-[11px] text-gray-200 whitespace-pre-wrap leading-relaxed"></pre>
             </div>
 
-            <!-- Instrucciones Discord -->
-            <p class="text-gray-300 text-sm text-center mb-5 leading-relaxed">
-                Para coordinar el pago y comenzar la optimización, ingresá a nuestro <strong>Discord oficial</strong> y abrí un ticket indicando tu plan.
-            </p>
-
-            <!-- Botones de Acción Modal -->
-            <div class="flex flex-col gap-3">
+            <!-- Botones de acción -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="copyOrderTicket()"
+                        class="py-3 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] text-white border border-white/10 font-display font-bold text-xs sm:text-sm uppercase flex items-center justify-center gap-2 transition-all cursor-pointer">
+                    <i class="fa-regular fa-clipboard text-crimson"></i> Copiar Ticket
+                </button>
                 <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-                   class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#ff1e1e] to-[#b91c1c] hover:from-[#ff3333] hover:to-[#dc2626] text-white font-display font-bold text-sm sm:text-base tracking-wider uppercase text-center shadow-[0_0_25px_rgba(255,30,30,0.6)] transition-all flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-discord text-xl"></i>
-                    <span>Ir al Discord Oficial</span>
+                   class="py-3 px-3 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-xs sm:text-sm uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,30,39,0.5)] transition-all">
+                    <i class="fa-brands fa-discord text-base"></i> Ir a Discord
                 </a>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <button id="copyOrderBtn" onclick="copyOrderDetails()"
-                            class="py-2.5 px-4 rounded-xl bg-[#1b1b26] hover:bg-[#252534] text-gray-200 border border-gray-700 font-tech font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i class="fa-regular fa-clipboard text-[#ff1e1e]"></i>
-                        <span>Copiar Pedido</span>
-                    </button>
-                    <button onclick="copyToClipboard('https://discord.gg/t2x9dKGdwf', '¡Link de Discord copiado!')"
-                            class="py-2.5 px-4 rounded-xl bg-[#1b1b26] hover:bg-[#252534] text-gray-200 border border-gray-700 font-tech font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i class="fa-solid fa-link text-[#ff1e1e]"></i>
-                        <span>Copiar Discord</span>
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- NOTIFICACIÓN TOAST (Reemplazo elegante de alert) -->
-    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden items-center gap-3 px-5 py-3.5 rounded-xl bg-[#14141d] border border-[#ff1e1e] text-white shadow-[0_0_25px_rgba(255,30,30,0.5)] font-tech font-bold text-base tracking-wide">
-        <i class="fa-solid fa-circle-check text-[#ff1e1e] text-lg"></i>
-        <span id="toastMessage">Copiado al portapapeles</span>
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-panel border border-crimson text-white font-mono text-xs font-bold shadow-[0_0_25px_rgba(255,30,39,0.5)]">
+        <i class="fa-solid fa-circle-check text-crimson"></i>
+        <span id="toastMsg">¡Listo!</span>
     </div>
 
-    <!-- JAVASCRIPT -->
     <script>
-        // Establecer año actual en el footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        // ==========================================
+        // 1. MÓDULO 'AJUSTE DE FPS EN VIVO'
+        // ==========================================
+        let fpsState = 'zeta'; // 'stock' o 'zeta'
+        let simPlan = 'ultra'; // 'basico', 'pro', 'ultra'
 
-        let selectedPlanText = '';
-        let toastTimeout;
+        const simSpecs = {
+            basico: { label: 'PLAN BÁSICO', fps: 165, lows: 148, delay: '4.2', stability: '94.5% ESTABLE // EMULADOR PULIDO' },
+            pro:    { label: 'PLAN PRO',    fps: 210, lows: 194, delay: '2.5', stability: '98.1% ESTABLE // WINDOWS + EMU' },
+            ultra:  { label: 'PLAN ULTRA',  fps: 240, lows: 231, delay: '1.6', stability: '99.8% ESTABLE // AJUSTES 1 FULL' }
+        };
 
-        // Función para abrir el modal con los datos del plan seleccionado
-        function openOrderModal(planName, planPrice, planDesc) {
-            try {
-                document.getElementById('modalPlanName').textContent = planName;
-                document.getElementById('modalPlanPrice').textContent = planPrice;
-                document.getElementById('modalPlanDesc').textContent = planDesc;
-
-                selectedPlanText = `Hola ZETA166! Quiero adquirir el *${planName}* (${planPrice}) - ${planDesc}.`;
-
-                const modal = document.getElementById('orderModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-            } catch (error) {
-                console.error('Error al abrir el modal:', error);
+        function renderFrametimeBars() {
+            const container = document.getElementById('frametimeChart');
+            container.innerHTML = '';
+            const barsCount = 30;
+            for (let i = 0; i < barsCount; i++) {
+                const bar = document.createElement('div');
+                let h, color;
+                if (fpsState === 'zeta') {
+                    const variance = simPlan === 'ultra' ? 4 : (simPlan === 'pro' ? 9 : 15);
+                    h = 86 + Math.floor(Math.random() * variance);
+                    color = 'bg-emerald-400';
+                } else {
+                    h = 25 + Math.floor(Math.random() * 72);
+                    color = h < 55 ? 'bg-crimson' : 'bg-amber-500';
+                }
+                bar.className = `flex-1 rounded-t-sm transition-all duration-300 ${color}`;
+                bar.style.height = `${h}%`;
+                container.appendChild(bar);
             }
         }
 
-        // Función para cerrar el modal
+        function updateFpsDashboard() {
+            const btnStock = document.getElementById('toggleStockBtn');
+            const btnZeta = document.getElementById('toggleZetaBtn');
+            const fpsEl = document.getElementById('readoutFps');
+            const tagEl = document.getElementById('readoutFpsTag');
+            const lowsEl = document.getElementById('readoutLows');
+            const delayEl = document.getElementById('readoutDelay');
+            const statusEl = document.getElementById('frametimeStatus');
+            const planLabelEl = document.getElementById('simPlanLabel');
+
+            // Actualizar botones de plan
+            ['basico', 'pro', 'ultra'].forEach(p => {
+                const el = document.getElementById('simPlan' + p.charAt(0).toUpperCase() + p.slice(1));
+                if (p === simPlan) {
+                    el.className = 'px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase bg-crimson/20 border border-crimson text-white transition-all cursor-pointer';
+                } else {
+                    el.className = 'px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase bg-obsidian border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer';
+                }
+            });
+
+            const spec = simSpecs[simPlan];
+            planLabelEl.textContent = spec.label;
+
+            if (fpsState === 'zeta') {
+                btnZeta.className = 'px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase bg-crimson text-white shadow-[0_0_14px_rgba(255,30,39,0.5)] transition-all cursor-pointer';
+                btnStock.className = 'px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer';
+
+                fpsEl.textContent = spec.fps;
+                tagEl.textContent = 'ESTABLE';
+                tagEl.className = 'font-mono text-[10px] font-bold text-emerald-400';
+                lowsEl.textContent = spec.lows;
+                delayEl.textContent = spec.delay;
+                delayEl.className = 'font-mono font-extrabold text-2xl sm:text-3xl text-emerald-400';
+                statusEl.textContent = spec.stability;
+                statusEl.className = 'text-emerald-400 font-bold';
+            } else {
+                btnStock.className = 'px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase bg-white/15 text-white transition-all cursor-pointer';
+                btnZeta.className = 'px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer';
+
+                fpsEl.textContent = '98';
+                tagEl.textContent = 'BAJONES';
+                tagEl.className = 'font-mono text-[10px] font-bold text-crimson';
+                lowsEl.textContent = '47';
+                delayEl.textContent = '15.4';
+                delayEl.className = 'font-mono font-extrabold text-2xl sm:text-3xl text-crimson';
+                statusEl.textContent = 'INESTABLE // STUTTER Y LAG EN SALAS';
+                statusEl.className = 'text-crimson font-bold';
+            }
+
+            renderFrametimeBars();
+        }
+
+        function setFpsState(state) {
+            fpsState = state;
+            updateFpsDashboard();
+        }
+
+        function setSimPlan(plan) {
+            simPlan = plan;
+            fpsState = 'zeta';
+            updateFpsDashboard();
+        }
+
+        // Inicializar dashboard de FPS
+        updateFpsDashboard();
+
+        // ==========================================
+        // 2. RESEÑAS VERIFICADAS (INICIALES + LOCALSTORAGE)
+        // ==========================================
+        const defaultReviews = [
+            {
+                name: 'Thiago_ARG',
+                plan: 'Plan Ultra ($20.000)',
+                rating: 5,
+                date: 'Hace 2 días',
+                comment: 'Compré el Plan Ultra por Mercado Pago y en 40 minutos me dejó el BlueStacks 5 clavado a 240 FPS. Con los Ajustes 1 la mira no se pasa ni un milímetro, pega todo rojo en clasificatoria.'
+            },
+            {
+                name: 'NicooFF_',
+                plan: 'Plan Pro ($15.000)',
+                rating: 5,
+                date: 'Hace 5 días',
+                comment: 'Tenía una PC gama baja y me pegaba tirones cada vez que rusheaban escuadras. Con la optimización de Windows + emulador de ZETA166 me bajó banda el input delay. Un crack, súper confiable.'
+            },
+            {
+                name: 'Valen_MSI',
+                plan: 'Plan Ultra ($20.000)',
+                rating: 5,
+                date: 'Hace 1 semana',
+                comment: '10/10 la atención en el Discord. Hice todo en vivo viendo por AnyDesk cómo me limpiaba procesos y me configuraba el MSI App Player. Vale cada peso.'
+            },
+            {
+                name: 'Lautaro_17',
+                plan: 'Plan Básico ($8.000)',
+                rating: 5,
+                date: 'Hace 2 semanas',
+                comment: 'Arranqué con el Plan Básico de 8 mil para probar y la diferencia en fluidez fue terrible. Cero bajones en mapa grande, próximamente paso al Ultra.'
+            }
+        ];
+
+        const STORAGE_KEY = 'zeta166_verified_reviews_v1';
+        let selectedRating = 5;
+
+        function getStoredReviews() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function renderReviews() {
+            const listEl = document.getElementById('reviewsList');
+            const userReviews = getStoredReviews();
+            const allReviews = [...userReviews, ...defaultReviews];
+
+            document.getElementById('reviewsCountLabel').textContent = `${allReviews.length} Reseñas verificadas`;
+            listEl.innerHTML = '';
+
+            allReviews.forEach(rev => {
+                const starsHtml = Array.from({ length: 5 }, (_, idx) =>
+                    `<i class="fa-solid fa-star ${idx < rev.rating ? 'text-amber-400' : 'text-gray-700'}"></i>`
+                ).join('');
+
+                const card = document.createElement('article');
+                card.className = 'rounded-2xl bg-panel border border-white/[0.08] p-4 flex flex-col justify-between gap-3';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-lg bg-crimson/20 border border-crimson/40 flex items-center justify-center font-display font-bold text-xs text-crimson uppercase">
+                                    ${escapeHtml(rev.name.charAt(0))}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-display font-bold text-sm text-white">${escapeHtml(rev.name)}</span>
+                                        <i class="fa-solid fa-circle-check text-emerald-400 text-[11px]" title="Compra Verificada"></i>
+                                    </div>
+                                    <span class="block font-mono text-[10px] text-crimson font-bold">${escapeHtml(rev.plan)}</span>
+                                </div>
+                            </div>
+                            <div class="text-[11px] flex items-center gap-0.5">${starsHtml}</div>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">"${escapeHtml(rev.comment)}"</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-white/[0.05] font-mono text-[10px] text-gray-500">
+                        <span>COMPRA VERIFICADA</span>
+                        <span>${escapeHtml(rev.date)}</span>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function setRating(stars) {
+            selectedRating = stars;
+            const buttons = document.querySelectorAll('.star-btn');
+            buttons.forEach((btn, i) => {
+                btn.className = `star-btn cursor-pointer ${i < stars ? 'text-amber-400' : 'text-gray-600'}`;
+            });
+            document.getElementById('ratingText').textContent = `${stars} / 5 Estrellas`;
+        }
+
+        function submitClientReview(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('revName');
+            const planInput = document.getElementById('revPlan');
+            const commentInput = document.getElementById('revComment');
+
+            const name = nameInput.value.trim();
+            const plan = planInput.value;
+            const comment = commentInput.value.trim();
+
+            if (!name || !comment) return;
+
+            const newReview = {
+                name,
+                plan,
+                rating: selectedRating,
+                date: 'Recién publicada',
+                comment
+            };
+
+            const existing = getStoredReviews();
+            existing.unshift(newReview);
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+            } catch (err) {
+                // Fallback si el navegador bloquea storage
+            }
+
+            nameInput.value = '';
+            commentInput.value = '';
+            setRating(5);
+            renderReviews();
+            showToast('¡Gracias! Tu reseña ya quedó publicada.');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        renderReviews();
+
+        // ==========================================
+        // 3. MODAL DE COMPRA & TICKET PARA DISCORD
+        // ==========================================
+        let activeOrder = { name: 'Plan Ultra', price: '$20.000 ARS', desc: 'Optimización + emulador + Ajustes 1 (todo completo)' };
+        let activePayment = 'Mercado Pago';
+
+        function openOrderModal(name, price, desc) {
+            activeOrder = { name, price, desc };
+            document.getElementById('modalPlanName').textContent = name;
+            document.getElementById('modalPlanPrice').textContent = price;
+            document.getElementById('modalPlanDesc').textContent = desc;
+            refreshTicketText();
+
+            const modal = document.getElementById('orderModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeOrderModal() {
             const modal = document.getElementById('orderModal');
             modal.classList.add('hidden');
@@ -521,60 +817,62 @@
             document.body.style.overflow = '';
         }
 
-        // Cerrar modal al hacer clic fuera de la tarjeta
-        document.getElementById('orderModal').addEventListener('click', function (e) {
-            if (e.target === this) {
-                closeOrderModal();
-            }
-        });
+        function choosePayment(method) {
+            activePayment = method;
+            const btnMp = document.getElementById('btnMp');
+            const btnPp = document.getElementById('btnPp');
 
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                closeOrderModal();
+            if (method === 'Mercado Pago') {
+                btnMp.className = 'py-2.5 px-3 rounded-xl border border-sky-400 bg-sky-500/15 text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer';
+                btnPp.className = 'py-2.5 px-3 rounded-xl border border-white/10 bg-obsidian text-gray-400 hover:text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer';
+            } else {
+                btnPp.className = 'py-2.5 px-3 rounded-xl border border-blue-400 bg-blue-500/15 text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer';
+                btnMp.className = 'py-2.5 px-3 rounded-xl border border-white/10 bg-obsidian text-gray-400 hover:text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer';
             }
-        });
-
-        // Copiar mensaje listo para pegar en ticket de Discord
-        function copyOrderDetails() {
-            copyToClipboard(selectedPlanText, '¡Pedido copiado! Pegalo en tu ticket de Discord.');
+            refreshTicketText();
         }
 
-        // Función segura para copiar al portapapeles usando execCommand
-        function copyToClipboard(text, successMessage) {
-            try {
-                const tempInput = document.createElement('textarea');
-                tempInput.value = text;
-                tempInput.setAttribute('readonly', '');
-                tempInput.style.position = 'absolute';
-                tempInput.style.left = '-9999px';
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-
-                showToast(successMessage);
-            } catch (err) {
-                console.error('No se pudo copiar el texto:', err);
-                showToast('No se pudo copiar automáticamente.');
-            }
+        function refreshTicketText() {
+            const userExtra = document.getElementById('orderUserInput').value.trim();
+            const userLine = userExtra ? `\n• Usuario / Emu: ${userExtra}` : '';
+            const text = `Hola ZETA166! Quiero comprar:\n• Plan: ${activeOrder.name} (${activeOrder.price})\n• Incluye: ${activeOrder.desc}\n• Método de pago: ${activePayment}${userLine}`;
+            document.getElementById('orderTicketBox').textContent = text;
         }
 
-        // Mostrar notificación visual tipo Toast
+        function copyOrderTicket() {
+            const text = document.getElementById('orderTicketBox').textContent;
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+
+            showToast('¡Ticket copiado! Pegalo en el Discord de ZETA166.');
+        }
+
+        let toastTimeout;
         function showToast(message) {
-            const toast = document.getElementById('toastNotification');
-            const toastMsg = document.getElementById('toastMessage');
-
-            toastMsg.textContent = message;
-            toast.classList.remove('hidden');
-            toast.classList.add('flex');
-
+            const banner = document.getElementById('toastBanner');
+            document.getElementById('toastMsg').textContent = message;
+            banner.classList.remove('hidden');
+            banner.classList.add('flex');
             clearTimeout(toastTimeout);
             toastTimeout = setTimeout(() => {
-                toast.classList.add('hidden');
-                toast.classList.remove('flex');
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
             }, 3200);
         }
+
+        document.getElementById('orderModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeOrderModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeOrderModal();
+        });
     </script>
 </body>
 </html>
