@@ -103,12 +103,38 @@
                 <a href="#resenas" class="text-gray-400 hover:text-white transition-colors">Reseñas Reales</a>
             </div>
 
-            <!-- Botón Discord -->
-            <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,39,0.45)] transition-all">
-                <i class="fa-brands fa-discord text-base"></i>
-                <span>Discord Oficial</span>
-            </a>
+            <!-- Controles de Cuenta Firebase + Botón Discord -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Botón cuando NO hay sesión -->
+                <button id="headerLoginBtn" onclick="openAuthModal('login')"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-panel hover:bg-[#191922] text-gray-200 hover:text-white border border-white/15 hover:border-crimson/60 font-display font-bold text-xs sm:text-sm tracking-wider uppercase transition-all cursor-pointer">
+                    <i class="fa-solid fa-user-shield text-crimson"></i>
+                    <span>Iniciar Sesión</span>
+                </button>
+
+                <!-- Perfil cuando SÍ hay sesión activa -->
+                <div id="headerUserBox" class="hidden items-center gap-2 pl-2 pr-1.5 py-1 rounded-xl bg-panel border border-crimson/40">
+                    <img id="headerUserAvatar" src="" alt="Avatar" class="w-7 h-7 rounded-lg object-cover border border-crimson/50 hidden">
+                    <div id="headerUserInitial" class="w-7 h-7 rounded-lg bg-crimson/20 border border-crimson/50 flex items-center justify-center font-display font-bold text-xs text-crimson uppercase">
+                        Z
+                    </div>
+                    <div class="hidden sm:flex flex-col text-left leading-tight max-w-[130px]">
+                        <span id="headerUserName" class="font-display font-bold text-xs text-white truncate">Usuario</span>
+                        <span id="headerUserEmail" class="font-mono text-[9px] text-gray-400 truncate">usuario@gmail.com</span>
+                    </div>
+                    <button onclick="logoutFirebase()" title="Cerrar Sesión"
+                            class="w-7 h-7 rounded-lg bg-white/[0.06] hover:bg-crimson text-gray-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Botón Discord -->
+                <a href="https://discord.gg/t2x9dKGdwf" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,39,0.45)] transition-all">
+                    <i class="fa-brands fa-discord text-base"></i>
+                    <span class="hidden sm:inline">Discord</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -414,6 +440,16 @@
                     </p>
 
                     <form id="reviewForm" onsubmit="submitClientReview(event)" class="space-y-3.5">
+                        <!-- Banner de estado de cuenta en el formulario de reseñas -->
+                        <div id="reviewAuthNotice" class="p-2.5 rounded-xl bg-obsidian border border-white/10 flex items-center justify-between gap-2 text-[11px]">
+                            <span class="text-gray-400 font-mono">
+                                <i class="fa-solid fa-lock text-crimson mr-1"></i>Iniciá sesión para insignia verificada
+                            </span>
+                            <button type="button" onclick="openAuthModal('login')" class="font-mono font-bold text-crimson hover:underline uppercase cursor-pointer">
+                                Entrar
+                            </button>
+                        </div>
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label for="revName" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Tu Nick / Nombre *</label>
@@ -541,11 +577,338 @@
         </div>
     </div>
 
+    <!-- 7. MODAL DE AUTENTICACIÓN FIREBASE (GOOGLE + GMAIL Y CONTRASEÑA) -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="relative w-full max-w-md rounded-2xl bg-[#0d0d13] border border-crimson/65 p-5 sm:p-6 shadow-[0_0_55px_rgba(255,30,39,0.4)]">
+            <button onclick="closeAuthModal()" aria-label="Cerrar"
+                    class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/[0.06] hover:bg-crimson text-gray-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-2 mb-1">
+                <div class="w-6 h-6 rounded-md bg-crimson flex items-center justify-center font-display font-bold text-white text-xs">Z</div>
+                <span class="font-mono text-[10px] font-bold text-crimson uppercase tracking-widest">CUENTA OFICIAL // ZETA166</span>
+            </div>
+            <h3 id="authModalTitle" class="font-display font-bold text-2xl text-white uppercase">
+                INICIAR SESIÓN
+            </h3>
+            <p class="text-xs text-gray-400 mt-0.5 mb-4">
+                Accedé con Google o tu correo Gmail para agilizar tus tickets y verificar tus reseñas.
+            </p>
+
+            <!-- Botón Continuar con Google -->
+            <button type="button" onclick="loginWithGoogle()"
+                    class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-sans font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer">
+                <svg class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+                </svg>
+                <span>Continuar con Google</span>
+            </button>
+
+            <div class="relative my-4 flex items-center justify-center">
+                <div class="border-t border-white/10 w-full"></div>
+                <span class="bg-[#0d0d13] px-3 font-mono text-[10px] text-gray-500 uppercase shrink-0">o con Gmail y contraseña</span>
+                <div class="border-t border-white/10 w-full"></div>
+            </div>
+
+            <!-- Pestañas Iniciar Sesión / Crear Cuenta -->
+            <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-obsidian border border-white/10 mb-4">
+                <button type="button" id="tabLoginBtn" onclick="switchAuthTab('login')"
+                        class="py-1.5 rounded-lg font-mono text-xs font-bold uppercase bg-crimson text-white transition-all cursor-pointer">
+                    Iniciar Sesión
+                </button>
+                <button type="button" id="tabRegisterBtn" onclick="switchAuthTab('register')"
+                        class="py-1.5 rounded-lg font-mono text-xs font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer">
+                    Crear Cuenta
+                </button>
+            </div>
+
+            <!-- Mensaje de error claro en español -->
+            <div id="authErrorBox" class="hidden mb-3 p-2.5 rounded-xl bg-crimson/15 border border-crimson/50 text-xs text-red-200 font-sans flex items-start gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-crimson mt-0.5 shrink-0"></i>
+                <span id="authErrorText">Error de autenticación.</span>
+            </div>
+
+            <!-- Formulario Email / Contraseña -->
+            <form id="authEmailForm" onsubmit="handleEmailAuth(event)" class="space-y-3">
+                <div id="registerNameGroup" class="hidden">
+                    <label for="authDisplayName" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Tu Nick / Tag Gamer *</label>
+                    <input id="authDisplayName" type="text" maxlength="26" placeholder="Ej: ZETA_Player"
+                           class="w-full px-3.5 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white placeholder-gray-600">
+                </div>
+
+                <div>
+                    <label for="authEmailInput" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Correo Gmail / Email *</label>
+                    <input id="authEmailInput" type="email" required placeholder="tucorreo@gmail.com"
+                           class="w-full px-3.5 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white placeholder-gray-600">
+                </div>
+
+                <div>
+                    <label for="authPasswordInput" class="block font-mono text-[11px] text-gray-400 uppercase mb-1">Contraseña *</label>
+                    <input id="authPasswordInput" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
+                           class="w-full px-3.5 py-2 rounded-xl bg-obsidian border border-white/10 focus:border-crimson focus:outline-none text-xs sm:text-sm text-white placeholder-gray-600">
+                </div>
+
+                <button id="authSubmitBtn" type="submit"
+                        class="w-full py-3 px-4 rounded-xl bg-crimson hover:bg-[#e0161e] text-white font-display font-bold text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(255,30,39,0.45)] transition-all cursor-pointer">
+                    Entrar con Gmail
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICACIÓN -->
     <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-panel border border-crimson text-white font-mono text-xs font-bold shadow-[0_0_25px_rgba(255,30,39,0.5)]">
         <i class="fa-solid fa-circle-check text-crimson"></i>
         <span id="toastMsg">¡Listo!</span>
     </div>
+
+    <!-- FIREBASE MODULAR SDK (v11.0.2) + LÓGICA COMPLETA -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            updateProfile,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+        // Configuración exacta de Firebase de ZETA166
+        const firebaseConfig = {
+            apiKey: "AIzaSyBooprZzsfe6kSmL7H5gmadRgpx4JcsFno",
+            authDomain: "zeta166-933e3.firebaseapp.com",
+            projectId: "zeta166-933e3",
+            storageBucket: "zeta166-933e3.firebasestorage.app",
+            messagingSenderId: "269766305625",
+            appId: "1:269766305625:web:808af181fddf4ce30f8e48",
+            measurementId: "G-Q903QW99YM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        window.currentFirebaseUser = null;
+        let authMode = 'login'; // 'login' o 'register'
+
+        // Escuchar cambios de sesión en tiempo real
+        onAuthStateChanged(auth, (user) => {
+            window.currentFirebaseUser = user;
+            updateAuthUI(user);
+        });
+
+        function updateAuthUI(user) {
+            const loginBtn = document.getElementById('headerLoginBtn');
+            const userBox = document.getElementById('headerUserBox');
+            const avatarImg = document.getElementById('headerUserAvatar');
+            const initialDiv = document.getElementById('headerUserInitial');
+            const nameEl = document.getElementById('headerUserName');
+            const emailEl = document.getElementById('headerUserEmail');
+            const reviewNotice = document.getElementById('reviewAuthNotice');
+            const revNameInput = document.getElementById('revName');
+
+            if (user) {
+                const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'Cliente ZETA166');
+                const email = user.email || '';
+
+                loginBtn.classList.add('hidden');
+                userBox.classList.remove('hidden');
+                userBox.classList.add('flex');
+
+                nameEl.textContent = displayName;
+                emailEl.textContent = email;
+
+                if (user.photoURL) {
+                    avatarImg.src = user.photoURL;
+                    avatarImg.classList.remove('hidden');
+                    initialDiv.classList.add('hidden');
+                } else {
+                    avatarImg.classList.add('hidden');
+                    initialDiv.classList.remove('hidden');
+                    initialDiv.textContent = displayName.charAt(0).toUpperCase();
+                }
+
+                // Autocompletar formulario de reseñas con estado verificado
+                if (revNameInput && !revNameInput.value) {
+                    revNameInput.value = displayName;
+                }
+                if (reviewNotice) {
+                    reviewNotice.className = 'p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/35 flex items-center justify-between gap-2 text-[11px]';
+                    reviewNotice.innerHTML = `
+                        <span class="text-emerald-300 font-mono truncate">
+                            <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verificado: <strong>${escapeHtml(email)}</strong>
+                        </span>
+                        <span class="font-mono text-[10px] font-bold text-emerald-400 uppercase shrink-0">OK</span>
+                    `;
+                }
+            } else {
+                loginBtn.classList.remove('hidden');
+                userBox.classList.add('hidden');
+                userBox.classList.remove('flex');
+
+                if (reviewNotice) {
+                    reviewNotice.className = 'p-2.5 rounded-xl bg-obsidian border border-white/10 flex items-center justify-between gap-2 text-[11px]';
+                    reviewNotice.innerHTML = `
+                        <span class="text-gray-400 font-mono">
+                            <i class="fa-solid fa-lock text-crimson mr-1"></i>Iniciá sesión para insignia verificada
+                        </span>
+                        <button type="button" onclick="openAuthModal('login')" class="font-mono font-bold text-crimson hover:underline uppercase cursor-pointer">
+                            Entrar
+                        </button>
+                    `;
+                }
+            }
+        }
+
+        function translateFirebaseError(code) {
+            switch (code) {
+                case 'auth/invalid-credential':
+                case 'auth/wrong-password':
+                case 'auth/user-not-found':
+                    return 'Correo Gmail o contraseña incorrectos. Verificá tus datos.';
+                case 'auth/email-already-in-use':
+                    return 'Este correo Gmail ya está registrado. Probá iniciar sesión.';
+                case 'auth/weak-password':
+                    return 'La contraseña es muy corta. Usá al menos 6 caracteres.';
+                case 'auth/invalid-email':
+                    return 'El formato del correo electrónico no es válido.';
+                case 'auth/unauthorized-domain':
+                    return 'Dominio no autorizado en Firebase Console. Agregá este dominio en Authentication > Settings > Authorized domains.';
+                case 'auth/popup-closed-by-user':
+                    return 'Cerraste la ventana de Google antes de completar el acceso.';
+                case 'auth/popup-blocked':
+                    return 'Tu navegador bloqueó la ventana emergente de Google. Permití pop-ups para este sitio.';
+                case 'auth/too-many-requests':
+                    return 'Demasiados intentos fallidos. Esperá unos minutos e intentá de nuevo.';
+                default:
+                    return 'No se pudo completar la autenticación (' + (code || 'error') + ').';
+            }
+        }
+
+        function showAuthError(msg) {
+            const box = document.getElementById('authErrorBox');
+            const text = document.getElementById('authErrorText');
+            text.textContent = msg;
+            box.classList.remove('hidden');
+            box.classList.add('flex');
+        }
+
+        function clearAuthError() {
+            const box = document.getElementById('authErrorBox');
+            box.classList.add('hidden');
+            box.classList.remove('flex');
+        }
+
+        window.openAuthModal = function(mode = 'login') {
+            clearAuthError();
+            switchAuthTab(mode);
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+
+        window.switchAuthTab = function(mode) {
+            authMode = mode;
+            clearAuthError();
+            const tabLogin = document.getElementById('tabLoginBtn');
+            const tabReg = document.getElementById('tabRegisterBtn');
+            const nameGroup = document.getElementById('registerNameGroup');
+            const titleEl = document.getElementById('authModalTitle');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const nameInput = document.getElementById('authDisplayName');
+
+            if (mode === 'login') {
+                tabLogin.className = 'py-1.5 rounded-lg font-mono text-xs font-bold uppercase bg-crimson text-white transition-all cursor-pointer';
+                tabReg.className = 'py-1.5 rounded-lg font-mono text-xs font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer';
+                nameGroup.classList.add('hidden');
+                nameInput.required = false;
+                titleEl.textContent = 'INICIAR SESIÓN';
+                submitBtn.textContent = 'Entrar con Gmail';
+            } else {
+                tabReg.className = 'py-1.5 rounded-lg font-mono text-xs font-bold uppercase bg-crimson text-white transition-all cursor-pointer';
+                tabLogin.className = 'py-1.5 rounded-lg font-mono text-xs font-bold uppercase text-gray-400 hover:text-white transition-all cursor-pointer';
+                nameGroup.classList.remove('hidden');
+                nameInput.required = true;
+                titleEl.textContent = 'CREAR CUENTA';
+                submitBtn.textContent = 'Registrarme con Gmail';
+            }
+        };
+
+        window.loginWithGoogle = async function() {
+            clearAuthError();
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                closeAuthModal();
+                showToast(`¡Bienvenido, ${result.user.displayName || result.user.email}!`);
+            } catch (err) {
+                showAuthError(translateFirebaseError(err.code));
+            }
+        };
+
+        window.handleEmailAuth = async function(e) {
+            e.preventDefault();
+            clearAuthError();
+            const email = document.getElementById('authEmailInput').value.trim();
+            const password = document.getElementById('authPasswordInput').value;
+            const displayName = document.getElementById('authDisplayName').value.trim();
+            const submitBtn = document.getElementById('authSubmitBtn');
+
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Procesando...';
+
+            try {
+                if (authMode === 'login') {
+                    const cred = await signInWithEmailAndPassword(auth, email, password);
+                    closeAuthModal();
+                    showToast(`¡Sesión iniciada como ${cred.user.displayName || cred.user.email}!`);
+                } else {
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    if (displayName) {
+                        await updateProfile(cred.user, { displayName });
+                    }
+                    updateAuthUI(auth.currentUser);
+                    closeAuthModal();
+                    showToast(`¡Cuenta creada! Bienvenido ${displayName || email}`);
+                }
+                document.getElementById('authEmailForm').reset();
+            } catch (err) {
+                showAuthError(translateFirebaseError(err.code));
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        };
+
+        window.logoutFirebase = async function() {
+            try {
+                await signOut(auth);
+                showToast('Sesión cerrada correctamente.');
+            } catch (err) {
+                showToast('Error al cerrar sesión.');
+            }
+        };
+
+        // Cerrar modal de auth al hacer clic fuera
+        document.getElementById('authModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeAuthModal();
+        });
+    </script>
 
     <script>
         // ==========================================
@@ -656,6 +1019,7 @@
                 plan: 'Plan Ultra ($20.000)',
                 rating: 5,
                 date: 'Hace 2 días',
+                verifiedAccount: true,
                 comment: 'Compré el Plan Ultra por Mercado Pago y en 40 minutos me dejó el BlueStacks 5 clavado a 240 FPS. Con los Ajustes 1 la mira no se pasa ni un milímetro, pega todo rojo en clasificatoria.'
             },
             {
@@ -663,6 +1027,7 @@
                 plan: 'Plan Pro ($15.000)',
                 rating: 5,
                 date: 'Hace 5 días',
+                verifiedAccount: true,
                 comment: 'Tenía una PC gama baja y me pegaba tirones cada vez que rusheaban escuadras. Con la optimización de Windows + emulador de ZETA166 me bajó banda el input delay. Un crack, súper confiable.'
             },
             {
@@ -670,6 +1035,7 @@
                 plan: 'Plan Ultra ($20.000)',
                 rating: 5,
                 date: 'Hace 1 semana',
+                verifiedAccount: true,
                 comment: '10/10 la atención en el Discord. Hice todo en vivo viendo por AnyDesk cómo me limpiaba procesos y me configuraba el MSI App Player. Vale cada peso.'
             },
             {
@@ -677,6 +1043,7 @@
                 plan: 'Plan Básico ($8.000)',
                 rating: 5,
                 date: 'Hace 2 semanas',
+                verifiedAccount: true,
                 comment: 'Arranqué con el Plan Básico de 8 mil para probar y la diferencia en fluidez fue terrible. Cero bajones en mapa grande, próximamente paso al Ultra.'
             }
         ];
@@ -706,6 +1073,10 @@
                     `<i class="fa-solid fa-star ${idx < rev.rating ? 'text-amber-400' : 'text-gray-700'}"></i>`
                 ).join('');
 
+                const badgeHtml = rev.verifiedAccount
+                    ? `<span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-circle-check"></i> CLIENTE VERIFICADO</span>`
+                    : `<span>RESEÑA COMUNIDAD</span>`;
+
                 const card = document.createElement('article');
                 card.className = 'rounded-2xl bg-panel border border-white/[0.08] p-4 flex flex-col justify-between gap-3';
                 card.innerHTML = `
@@ -718,7 +1089,7 @@
                                 <div>
                                     <div class="flex items-center gap-1.5">
                                         <span class="font-display font-bold text-sm text-white">${escapeHtml(rev.name)}</span>
-                                        <i class="fa-solid fa-circle-check text-emerald-400 text-[11px]" title="Compra Verificada"></i>
+                                        ${rev.verifiedAccount ? '<i class="fa-solid fa-circle-check text-emerald-400 text-[11px]" title="Cuenta Verificada con Google/Gmail"></i>' : ''}
                                     </div>
                                     <span class="block font-mono text-[10px] text-crimson font-bold">${escapeHtml(rev.plan)}</span>
                                 </div>
@@ -728,7 +1099,7 @@
                         <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">"${escapeHtml(rev.comment)}"</p>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-white/[0.05] font-mono text-[10px] text-gray-500">
-                        <span>COMPRA VERIFICADA</span>
+                        ${badgeHtml}
                         <span>${escapeHtml(rev.date)}</span>
                     </div>
                 `;
@@ -757,11 +1128,15 @@
 
             if (!name || !comment) return;
 
+            const isLogged = Boolean(window.currentFirebaseUser);
+
             const newReview = {
                 name,
                 plan,
                 rating: selectedRating,
                 date: 'Recién publicada',
+                verifiedAccount: isLogged,
+                email: isLogged ? window.currentFirebaseUser.email : '',
                 comment
             };
 
@@ -773,11 +1148,13 @@
                 // Fallback si el navegador bloquea storage
             }
 
-            nameInput.value = '';
+            if (!isLogged) {
+                nameInput.value = '';
+            }
             commentInput.value = '';
             setRating(5);
             renderReviews();
-            showToast('¡Gracias! Tu reseña ya quedó publicada.');
+            showToast(isLogged ? '¡Reseña publicada con insignia de Cliente Verificado!' : '¡Gracias! Tu reseña ya quedó publicada.');
         }
 
         function escapeHtml(str) {
@@ -802,6 +1179,15 @@
             document.getElementById('modalPlanName').textContent = name;
             document.getElementById('modalPlanPrice').textContent = price;
             document.getElementById('modalPlanDesc').textContent = desc;
+
+            // Autocompletar usuario/Gmail si inició sesión en Firebase
+            const userInput = document.getElementById('orderUserInput');
+            if (window.currentFirebaseUser && !userInput.value.trim()) {
+                const tag = window.currentFirebaseUser.displayName || '';
+                const mail = window.currentFirebaseUser.email || '';
+                userInput.value = tag && mail ? `${tag} (${mail})` : (mail || tag);
+            }
+
             refreshTicketText();
 
             const modal = document.getElementById('orderModal');
@@ -834,8 +1220,11 @@
 
         function refreshTicketText() {
             const userExtra = document.getElementById('orderUserInput').value.trim();
+            const loggedEmail = window.currentFirebaseUser && window.currentFirebaseUser.email
+                ? `\n• Cuenta Verificada: ${window.currentFirebaseUser.email}`
+                : '';
             const userLine = userExtra ? `\n• Usuario / Emu: ${userExtra}` : '';
-            const text = `Hola ZETA166! Quiero comprar:\n• Plan: ${activeOrder.name} (${activeOrder.price})\n• Incluye: ${activeOrder.desc}\n• Método de pago: ${activePayment}${userLine}`;
+            const text = `Hola ZETA166! Quiero comprar:\n• Plan: ${activeOrder.name} (${activeOrder.price})\n• Incluye: ${activeOrder.desc}\n• Método de pago: ${activePayment}${userLine}${loggedEmail}`;
             document.getElementById('orderTicketBox').textContent = text;
         }
 
@@ -871,7 +1260,10 @@
             if (e.target === e.currentTarget) closeOrderModal();
         });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeOrderModal();
+            if (e.key === 'Escape') {
+                closeOrderModal();
+                if (typeof closeAuthModal === 'function') closeAuthModal();
+            }
         });
     </script>
 </body>
