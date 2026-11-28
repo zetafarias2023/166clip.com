@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZETA166 OPTIMIZER – Descargar v3.0.0</title>
+<meta name="description" content="Descargá ZETA166 OPTIMIZER 3.0.0 para Windows. Licencias de 7 días ($5.000 ARS) y 15 días ($8.000 ARS) por ticket en Discord.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0d24; --bg2:#181540; --line:#2e2a66; --ink:#eceaff; --mute:#a7a3d6;
+  --violet:#7a5cff; --violet2:#9d86ff; --ice:#5ee0ff; --disc:#5865f2;
+  --display:"Unbounded","Arial Black",Impact,system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:dark;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);
+  background-image:radial-gradient(900px 500px at 85% -10%,#2a2175 0,transparent 70%),radial-gradient(700px 400px at -10% 40%,#1b2b63 0,transparent 70%);
+  background-repeat:no-repeat}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ice);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.logo{font:800 18px var(--display);letter-spacing:.02em;text-decoration:none}
+.logo b{color:var(--violet2);font-weight:800}
+.navlink{font-weight:700;text-decoration:none;color:var(--mute);padding:8px 14px;border:1px solid var(--line);border-radius:99px}
+.navlink:hover{color:var(--ink);border-color:var(--violet)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:48px 0 72px}
+h1{font:800 clamp(38px,6.4vw,76px)/1 var(--display);margin:0 0 22px;letter-spacing:-.02em}
+h1 span{display:block;color:var(--violet2)}
+.lead{font-size:19px;color:var(--mute);max-width:46ch;margin:0 0 30px}
+.btn{display:inline-flex;align-items:center;gap:12px;font:700 17px var(--body);text-decoration:none;
+  padding:17px 28px;border-radius:14px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:translateY(1px)}
+.btn-dl{background:linear-gradient(180deg,var(--violet2),var(--violet));color:#fff;box-shadow:0 10px 30px -8px #7a5cffaa,inset 0 1px 0 #fff4}
+.btn-dl:hover{box-shadow:0 14px 36px -8px #7a5cffdd,inset 0 1px 0 #fff4}
+.btn-dc{background:var(--disc);color:#fff}
+.btn-dc:hover{background:#6b77f6}
+.btn svg{width:22px;height:22px;flex:none}
+.meta{margin:18px 0 0;color:var(--mute);font-size:15px}
+.meta strong{color:var(--ink)}
+
+/* dial */
+.dial{position:relative;aspect-ratio:1;max-width:400px;width:100%;margin-inline:auto}
+.dial svg{width:100%;height:100%;overflow:visible}
+.track{stroke:var(--line);fill:none;stroke-width:14;stroke-linecap:round}
+.arc{fill:none;stroke:url(#g);stroke-width:14;stroke-linecap:round;stroke-dasharray:540;stroke-dashoffset:540;animation:sweep 1.8s cubic-bezier(.2,.8,.2,1) .3s forwards}
+@keyframes sweep{to{stroke-dashoffset:165}}
+.tick{stroke:var(--line);stroke-width:2}
+.dial-c{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.dial-c b{font:800 clamp(34px,6vw,56px)/1 var(--display)}
+.dial-c small{color:var(--mute);font-size:15px;margin-top:8px}
+
+/* secciones */
+section{padding:72px 0;border-top:1px solid var(--line)}
+h2{font:700 clamp(26px,4vw,40px)/1.15 var(--display);margin:0 0 14px;letter-spacing:-.01em}
+.sub{color:var(--mute);max-width:56ch;margin:0 0 38px}
+
+.lic{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.price{background:linear-gradient(160deg,var(--bg2),#120f33);border:1px solid var(--violet);border-radius:22px;padding:34px;display:flex;flex-direction:column;gap:6px}
+.price .amt{font:800 clamp(44px,7vw,68px)/1 var(--display)}
+.price .amt sup{font-size:.4em;vertical-align:top;margin-right:4px;color:var(--violet2)}
+.price p{margin:0;color:var(--mute)}
+.plan{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.plan:first-of-type{border-top:0}
+.plan .amt{font-size:clamp(34px,5vw,48px)}
+.plan .days{font:700 18px var(--body);color:var(--ink);text-align:right}
+.plan .days small{display:block;font-weight:400;font-size:14px;color:var(--mute)}
+.price .btn{margin-top:22px;justify-content:center}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:18px;align-content:center}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start}
+ol.steps li::before{content:counter(s);width:42px;height:42px;border-radius:50%;border:1px solid var(--violet);display:grid;place-items:center;font:700 16px var(--display);color:var(--violet2)}
+ol.steps b{display:block}
+ol.steps span{color:var(--mute);font-size:15.5px}
+
+.reqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.reqs div{padding:22px 24px;border-right:1px solid var(--line)}
+.reqs div:last-child{border-right:0}
+.reqs dt{color:var(--mute);font-size:14px}
+.reqs dd{margin:4px 0 0;font-weight:700}
+.hash{margin-top:22px;font-size:14px;color:var(--mute)}
+.hash code{display:block;margin-top:6px;padding:12px 14px;background:#0a081c;border:1px solid var(--line);border-radius:10px;font:13px/1.5 ui-monospace,Consolas,monospace;color:var(--ice);word-break:break-all}
+
+details{border-bottom:1px solid var(--line);padding:18px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 24px/1 var(--display);color:var(--violet2);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:12px 0 0;color:var(--mute);max-width:70ch}
+
+.cta{text-align:center}
+.cta .btn{margin:8px 6px 0}
+footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--mute);font-size:14px;text-align:center}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;padding-top:24px}
+  .dial{max-width:300px;order:-1}
+  .lic{grid-template-columns:1fr}
+  .reqs div{border-right:0;border-bottom:1px solid var(--line)}
+  .reqs div:last-child{border-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .arc{animation:none;stroke-dashoffset:165}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="#">ZETA<b>166</b></a>
+    <a class="navlink" href="https://discord.gg/7TkJQWRgt3" target="_blank" rel="noopener">Discord</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>ZETA166 <span>OPTIMIZER</span></h1>
+        <p class="lead">Optimizá tu PC con Windows en pocos clics. Descargá el instalador, abrilo y activá tu licencia con la key que te damos por Discord.</p>
+        <a class="btn btn-dl" href="ZETA166_OPTIMIZER_Setup_3_0_0.exe" data-dl>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 20h16"/></svg>
+          Descargar para Windows
+        </a>
+        <p class="meta"><strong>Versión 3.0.0</strong> · instalador .exe · 84 MB · Windows 10 / 11 (64 bits)</p>
+      </div>
+      <div class="dial" aria-hidden="true">
+        <svg viewBox="0 0 220 220">
+          <defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#7a5cff"/><stop offset="1" stop-color="#5ee0ff"/></linearGradient></defs>
+          <g transform="rotate(135 110 110)">
+            <circle class="track" cx="110" cy="110" r="86" stroke-dasharray="406 540"/>
+            <circle class="arc" cx="110" cy="110" r="86" pathLength="540" style="stroke-dasharray:540 540"/>
+          </g>
+          <g id="ticks"></g>
+        </svg>
+        <div class="dial-c"><b>3.0.0</b><small>Última versión</small></div>
+      </div>
+    </div>
+
+    <section id="licencia">
+      <h2>Licencias: 7 o 15 días</h2>
+      <p class="sub">La descarga es libre. Para usar el programa necesitás una licencia, y se compra abriendo un ticket en nuestro Discord. Elegí cuántos días la querés.</p>
+      <div class="lic">
+        <div class="price">
+          <p>Licencias ZETA166 OPTIMIZER</p>
+          <div class="plan"><div class="amt"><sup>$</sup>5.000</div><div class="days">7 días<small>pesos argentinos</small></div></div>
+          <div class="plan"><div class="amt"><sup>$</sup>8.000</div><div class="days">15 días<small>pesos argentinos</small></div></div>
+          <p>Se gestiona por ticket en Discord.</p>
+          <a class="btn btn-dc" href="https://discord.gg/7TkJQWRgt3" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A18.6 18.6 0 0 0 15.7 3l-.2.4c1.7.4 2.5 1 3.4 1.7a12 12 0 0 0-10.2 0c.9-.7 1.800-1.300 3.500-1.700L12 3a18.600 18.600 0 0 0-4.600 1.400C4.500 8.700 3.700 13 4.100 17.200a18.700 18.700 0 0 0 5.600 2.800l1.200-1.900c-.7-.2-1.300-.5-1.900-.9l.5-.4a13.300 13.300 0 0 0 11 0l.5.4c-.6.400-1.200.7-1.900.9l1.200 1.900a18.700 18.700 0 0 0 5.600-2.800c.5-4.900-.8-9.200-3.600-12.800ZM9.400 14.600c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2Zm5.200 0c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2Z"/></svg>
+            Abrir ticket en Discord
+          </a>
+        </div>
+        <ol class="steps">
+          <li><div><b>Entrá al Discord</b><span>Usá el botón y unite al servidor.</span></div></li>
+          <li><div><b>Abrí un ticket</b><span>Pedí tu licencia de 7 o 15 días en el canal de tickets.</span></div></li>
+          <li><div><b>Pagá tu plan</b><span>$5.000 ARS por 7 días o $8.000 ARS por 15 días. El staff te indica cómo pagar.</span></div></li>
+          <li><div><b>Activá tu key</b><span>Recibís tu licencia y la ingresás en el programa.</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="detalles">
+      <h2>Antes de instalar</h2>
+      <p class="sub">Todo lo que necesitás saber sobre el archivo.</p>
+      <dl class="reqs">
+        <div><dt>Versión</dt><dd>3.0.0</dd></div>
+        <div><dt>Sistema</dt><dd>Windows 10 / 11</dd></div>
+        <div><dt>Tamaño</dt><dd>84 MB</dd></div>
+        <div><dt>Licencias</dt><dd>7 días $5.000 · 15 días $8.000</dd></div>
+        <div><dt>Soporte</dt><dd>Lunes</dd></div>
+      </dl>
+    </section>
+
+    <section id="faq">
+      <h2>Preguntas frecuentes</h2>
+      <details><summary>¿Cómo consigo la licencia?</summary><p>Abrí un ticket en nuestro Discord. Hay dos opciones: 7 días por $5.000 ARS o 15 días por $8.000 ARS. El staff te guía con el pago y la entrega de tu key.</p></details>
+      <details><summary>Windows me muestra “Windows protegió tu PC”. ¿Qué hago?</summary><p>Es un aviso de SmartScreen que aparece con programas que Windows todavía no reconoce. Hacé clic en “Más información” y después en “Ejecutar de todas formas”.</p></details>
+      <details><summary>Mi antivirus bloquea el instalador</summary><p>Algunos antivirus frenan instaladores de optimización. Agregá una excepción para el archivo o la carpeta de descargas y volvé a ejecutarlo. Si seguís con problemas, abrí un ticket y te respondemos el lunes.</p></details>
+      <details><summary>¿Funciona en Mac o Linux?</summary><p>No. ZETA166 OPTIMIZER es solo para Windows 10 y 11.</p></details>
+      <details><summary>¿Cuándo hay soporte?</summary><p>El soporte es solo los lunes. Abrí un ticket en el Discord cuando quieras, contanos qué pasa y lo vemos ese día.</p></details>
+    </section>
+
+    <section class="cta">
+      <h2>Listo para optimizar tu PC</h2>
+      <p class="sub" style="margin-inline:auto">Descargá la versión 3.0.0 y pedí tu licencia de 7 o 15 días por ticket.</p>
+      <a class="btn btn-dl" href="ZETA166_OPTIMIZER_Setup_3_0_0.exe" data-dl>Descargar v3.0.0</a>
+      <a class="btn btn-dc" href="https://discord.gg/7TkJQWRgt3" target="_blank" rel="noopener">Comprar licencia</a>
+    </section>
+  </main>
+
+  <footer>Soporte solo los lunes · © <span id="y">2026</span> ZETA166 · Todos los derechos reservados</footer>
+</div>
+<script>
+// === LINK DE DESCARGA ===
+// Si el .exe está en la misma carpeta que este index.html, dejalo así.
+// Si lo subís a otro lado (GitHub, Mediafire, Mega, Drive...), pegá acá el link completo.
+var DOWNLOAD_URL = "ZETA166_OPTIMIZER_Setup_3_0_0.exe";
+document.querySelectorAll('[data-dl]').forEach(function(a){a.href=DOWNLOAD_URL;});
+(function(){
+  var g=document.getElementById('ticks'),ns='http://www.w3.org/2000/svg';
+  for(var i=0;i<=20;i++){
+    var a=(135+i*13.5)*Math.PI/180,r1=104,r2=i%5===0?116:111;
+    var l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',110+r1*Math.cos(a));l.setAttribute('y1',110+r1*Math.sin(a));
+    l.setAttribute('x2',110+r2*Math.cos(a));l.setAttribute('y2',110+r2*Math.sin(a));
+    l.setAttribute('class','tick');g.appendChild(l);
+  }
+  document.getElementById('y').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
